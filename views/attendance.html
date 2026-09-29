@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KICKSYNC - Attendance</title>
+
+    <style>
+        :root {
+            --blue: #0057b8;
+            --blue-dark: #003f88;
+            --blue-deep: #002b5c;
+            --yellow: #f5c400;
+            --yellow-light: #fff8d6;
+            --white: #ffffff;
+            --bg: #f4f7fb;
+            --text: #172033;
+            --muted: #6b7280;
+            --border: #e3e8ef;
+            --green: #16803c;
+            --green-light: #e8f7ed;
+            --red: #c62828;
+            --red-light: #fdecec;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: var(--blue-deep);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            height: 82px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--yellow);
+            color: var(--blue-deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 900;
+            margin-right: 11px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 10px;
+            color: #b9c7da;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 18px 12px;
+            overflow-y: auto;
+        }
+
+        .nav-section-title {
+            color: #8497b3;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 13px 7px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #d8e2f0;
+            padding: 11px 13px;
+            margin-bottom: 3px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s ease;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .sidebar-nav a.active {
+            background: var(--blue);
+            color: white;
+            font-weight: 700;
+        }
+
+        .nav-icon {
+            width: 27px;
+            font-size: 15px;
+            text-align: center;
+            margin-right: 7px;
+        }
+
+        .sidebar-bottom {
+            padding: 14px 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #ffb4b4;
+            padding: 11px 13px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .logout-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-content {
+            margin-left: 245px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            height: 82px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        .header-left h1 {
+            font-size: 21px;
+            color: var(--blue-deep);
+            margin-bottom: 4px;
+        }
+
+        .header-left p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .club-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--blue);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .club-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--blue-deep);
+        }
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .page-content {
+            padding: 30px 32px 45px;
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title h2 {
+            font-size: 25px;
+            color: var(--blue-deep);
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .attendance-badge {
+            background: var(--yellow-light);
+            color: #7a6200;
+            border: 1px solid #f1d66a;
+            padding: 9px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           SESSION CONTROL PANEL
+        ========================= */
+
+        .control-panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 8px rgba(0, 40, 90, 0.04);
+        }
+
+        .panel-title {
+            color: var(--blue-deep);
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #39455a;
+            margin-bottom: 7px;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #ccd4df;
+            border-radius: 6px;
+            padding: 0 12px;
+            font-size: 13px;
+            color: var(--text);
+            background: white;
+            outline: none;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 2px rgba(0, 87, 184, 0.08);
+        }
+
+        /* =========================
+           ATTENDANCE PANEL
+        ========================= */
+
+        .attendance-panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 40, 90, 0.04);
+            overflow: hidden;
+        }
+
+        .attendance-panel-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .attendance-panel-header h3 {
+            font-size: 16px;
+            color: var(--blue-deep);
+        }
+
+        .attendance-panel-header span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        thead {
+            background: #f7f9fc;
+        }
+
+        th {
+            padding: 13px 18px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #637085;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #edf0f4;
+            font-size: 13px;
+            color: #273247;
+        }
+
+        tbody tr:hover {
+            background: #fafcff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .trainee-name {
+            font-weight: 700;
+            color: var(--blue-deep);
+        }
+
+        .position-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 14px;
+            background: #edf4ff;
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-select {
+            min-width: 115px;
+            height: 34px;
+            border: 1px solid #cbd4df;
+            border-radius: 5px;
+            padding: 0 9px;
+            font-size: 12px;
+            font-weight: 600;
+            background: white;
+            outline: none;
+        }
+
+        .status-select:focus {
+            border-color: var(--blue);
+        }
+
+        /* =========================
+           SAVE SECTION
+        ========================= */
+
+        .save-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .save-note {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .save-button {
+            border: none;
+            background: var(--blue);
+            color: white;
+            padding: 12px 22px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .save-button:hover {
+            background: var(--blue-dark);
+        }
+
+        .save-button:disabled {
+            background: #9aa8b8;
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           LOADING / EMPTY STATES
+        ========================= */
+
+        .loading-cell,
+        .empty-cell,
+        .error-cell {
+            text-align: center;
+            padding: 35px !important;
+            color: var(--muted);
+        }
+
+        .error-cell {
+            color: var(--red);
+        }
+
+        /* =========================
+           WATERMARK
+        ========================= */
+
+        .watermark {
+            text-align: center;
+            margin-top: 28px;
+            color: #c3cad4;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-content {
+                padding: 25px 20px 40px;
+            }
+
+            .top-header {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-nav {
+                max-height: none;
+            }
+
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .top-header {
+                height: auto;
+                padding: 18px 20px;
+            }
+
+            .header-right {
+                display: none;
+            }
+
+            .page-title {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+            .save-section {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            .save-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                KS
+            </div>
+
+            <div class="brand-text">
+                <div class="brand-name">KICKSYNC</div>
+                <div class="brand-subtitle">
+                    Academy Management
+                </div>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-section-title">
+                Main
+            </div>
+
+            <a href="/dashboard">
+                <span class="nav-icon">▦</span>
+                Dashboard
+            </a>
+
+            <a href="/trainees">
+                <span class="nav-icon">♙</span>
+                Trainees
+            </a>
+
+            <a href="/register">
+                <span class="nav-icon">＋</span>
+                Register Trainee
+            </a>
+
+            <a href="/attendance" class="active">
+                <span class="nav-icon">✓</span>
+                Attendance
+            </a>
+
+            <a href="/sessions">
+                <span class="nav-icon">▣</span>
+                Training Sessions
+            </a>
+
+
+            <div class="nav-section-title">
+                Management
+            </div>
+
+            <a href="/qr">
+                <span class="nav-icon">▤</span>
+                QR Attendance
+            </a>
+
+            <a href="/report">
+                <span class="nav-icon">▤</span>
+                Reports
+            </a>
+
+            <a href="/groups">
+                <span class="nav-icon">♧</span>
+                Groups
+            </a>
+
+
+            <div class="nav-section-title">
+                Account
+            </div>
+
+            <a href="/profile">
+                <span class="nav-icon">●</span>
+                Profile
+            </a>
+
+            <a href="/settings">
+                <span class="nav-icon">⚙</span>
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="/logout" class="logout-link">
+                <span class="nav-icon">↪</span>
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main-content">
+
+        <!-- TOP HEADER -->
+
+        <header class="top-header">
+
+            <div class="header-left">
+
+                <h1>Training Attendance</h1>
+
+                <p>
+                    Record and manage academy trainee attendance
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <div class="club-badge">
+                    KCCA
+                </div>
+
+                <div class="club-name">
+                    KCCA FC Academy
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+
+        <section class="page-content">
+
+
+            <!-- PAGE TITLE -->
+
+            <div class="page-title">
+
+                <div>
+
+                    <h2>Take Attendance</h2>
+
+                    <p>
+                        Mark any trainee who did NOT scan the QR code as absent.
+                        Present is recorded automatically when a trainee scans in.
+                    </p>
+
+                </div>
+
+                <div class="attendance-badge">
+                    Academy Roll Call
+                </div>
+
+            </div>
+
+
+            <!-- SESSION CONTROLS -->
+
+            <div class="control-panel">
+
+                <div class="panel-title">
+                    Attendance Details
+                </div>
+
+
+                <div class="controls-grid">
+
+                    <div class="form-group">
+
+                        <label for="sessionSelect">
+                            Training Session
+                        </label>
+
+                        <select id="sessionSelect" required>
+
+                            <option value="">
+                                Loading sessions...
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="attendanceDate">
+                            Training Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="attendanceDate"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ATTENDANCE TABLE -->
+
+            <div class="attendance-panel">
+
+                <div class="attendance-panel-header">
+
+                    <h3>
+                        Academy Trainees
+                    </h3>
+
+                    <span id="traineeCount">
+                        Loading trainees...
+                    </span>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ID
+                                </th>
+
+                                <th>
+                                    Full Name
+                                </th>
+
+                                <th>
+                                    Age
+                                </th>
+
+                                <th>
+                                    Position
+                                </th>
+
+                                <th>
+                                    Attendance Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="attendanceTable">
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="loading-cell"
+                                >
+                                    Loading trainees...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVE -->
+
+            <div class="save-section">
+
+                <div class="save-note">
+                    Present is only recorded via QR scan.
+                    Any trainee not marked here will remain unmarked.
+                </div>
+
+                <button
+                    type="button"
+                    class="save-button"
+                    id="saveButton"
+                    onclick="saveAttendance()"
+                >
+                    Save Attendance
+                </button>
+
+            </div>
+
+
+            <div class="watermark">
+                KICKSYNC • KCCA FC Academy Management System
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        // Store trainees
+        let trainees = [];
+
+
+        // ==========================================
+        // SET TODAY'S DATE AUTOMATICALLY
+        // ==========================================
+
+        const today = new Date();
+
+        const year = today.getFullYear();
+
+        const month = String(
+            today.getMonth() + 1
+        ).padStart(2, "0");
+
+        const day = String(
+            today.getDate()
+        ).padStart(2, "0");
+
+        document.getElementById(
+            "attendanceDate"
+        ).value =
+            year + "-" + month + "-" + day;
+
+
+        // ==========================================
+        // LOAD TRAINING SESSIONS
+        // ==========================================
+
+        function loadSessions() {
+
+            fetch("/api/sessions")
+
+                .then(function(response) {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Could not load sessions."
+                        );
+
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(function(sessions) {
+
+                    const select =
+                        document.getElementById(
+                            "sessionSelect"
+                        );
+
+
+                    // Clear old options
+
+                    select.innerHTML =
+                        '<option value="">Select training session</option>';
+
+
+                    // Add each session
+
+                    sessions.forEach(function(session) {
+
+                        const option =
+                            document.createElement("option");
+
+
+                        option.value =
+                            session.id;
+
+
+                        let formattedDate = "";
+
+
+                        if (session.session_date) {
+
+                            const sessionDate =
+                                new Date(
+                                    session.session_date
+                                );
+
+
+                            formattedDate =
+                                sessionDate.getFullYear() +
+                                "-" +
+                                String(
+                                    sessionDate.getMonth() + 1
+                                ).padStart(2, "0") +
+                                "-" +
+                                String(
+                                    sessionDate.getDate()
+                                ).padStart(2, "0");
+
+                        }
+
+
+                        option.textContent =
+                            formattedDate +
+                            " - " +
+                            session.session_time +
+                            " - " +
+                            session.session_type;
+
+
+                        select.appendChild(
+                            option
+                        );
+
+                    });
+
+                })
+
+                .catch(function(error) {
+
+                    console.error(error);
+
+                    document.getElementById(
+                        "sessionSelect"
+                    ).innerHTML =
+                        '<option value="">Error loading sessions</option>';
+
+                });
+
+        }
+
+
+        // ==========================================
+        // LOAD TRAINEES
+        // ==========================================
+
+        function loadTrainees() {
+
+            fetch("/api/trainees")
+
+                .then(function(response) {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Could not load trainees."
+                        );
+
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(function(data) {
+
+                    trainees = data;
+
+
+                    const table =
+                        document.getElementById(
+                            "attendanceTable"
+                        );
+
+
+                    const traineeCount =
+                        document.getElementById(
+                            "traineeCount"
+                        );
+
+
+                    table.innerHTML = "";
+
+
+                    traineeCount.textContent =
+                        trainees.length +
+                        (
+                            trainees.length === 1
+                                ? " trainee"
+                                : " trainees"
+                        );
+
+
+                    // No trainees
+
+                    if (trainees.length === 0) {
+
+                        table.innerHTML = `
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="empty-cell"
+                                >
+                                    No trainees registered.
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                        return;
+
+                    }
+
+
+                    // Add every trainee
+
+                    trainees.forEach(function(player) {
+
+                        const row =
+                            document.createElement("tr");
+
+
+                        row.innerHTML = `
+
+                            <td>
+                                ${player.id}
+                            </td>
+
+                            <td>
+                                <span class="trainee-name">
+                                    ${player.full_name}
+                                </span>
+                            </td>
+
+                            <td>
+                                ${player.age}
+                            </td>
+
+                            <td>
+                                <span class="position-badge">
+                                    ${player.position}
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <select
+                                    class="status-select"
+                                    id="status-${player.id}"
+                                >
+
+                                    <option value="" selected>
+                                        -- Select --
+                                    </option>
+
+                                    <option value="Absent">
+                                        Absent
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                        `;
+
+
+                        table.appendChild(row);
+
+                    });
+
+                })
+
+                .catch(function(error) {
+
+                    console.error(error);
+
+
+                    document.getElementById(
+                        "attendanceTable"
+                    ).innerHTML = `
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="error-cell"
+                            >
+                                Error loading trainees.
+                            </td>
+
+                        </tr>
+
+                    `;
+
+
+                    document.getElementById(
+                        "traineeCount"
+                    ).textContent =
+                        "Unable to load trainees";
+
+                });
+
+        }
+
+
+        // ==========================================
+        // SAVE ATTENDANCE
+        // ==========================================
+
+        function saveAttendance() {
+
+            const date =
+                document.getElementById(
+                    "attendanceDate"
+                ).value;
+
+
+            const sessionId =
+                document.getElementById(
+                    "sessionSelect"
+                ).value;
+
+
+            const saveButton =
+                document.getElementById(
+                    "saveButton"
+                );
+
+
+            // Check session
+
+            if (!sessionId) {
+
+                alert(
+                    "Please select a training session."
+                );
+
+                return;
+
+            }
+
+
+            // Check date
+
+            if (!date) {
+
+                alert(
+                    "Please select the training date."
+                );
+
+                return;
+
+            }
+
+
+            // Check trainees
+
+            if (trainees.length === 0) {
+
+                alert(
+                    "There are no trainees to record attendance for."
+                );
+
+                return;
+
+            }
+
+
+            // Ensure every trainee has an explicit status
+
+            const unmarked = trainees.filter(function(player) {
+
+                return (
+                    document.getElementById(
+                        "status-" + player.id
+                    ).value === ""
+                );
+
+            });
+
+
+            if (unmarked.length > 0) {
+
+                const names = unmarked.map(function(p) {
+
+                    return p.full_name;
+
+                }).join(", ");
+
+
+                alert(
+                    "Please mark each unmarked trainee as Absent before saving.\n\n" +
+                    "Still unmarked (" + unmarked.length + "):\n" +
+                    names
+                );
+
+                return;
+
+            }
+
+
+            // Build attendance records
+
+            const attendanceRecords =
+                trainees.map(function(player) {
+
+                    return {
+
+                        player_id:
+                            player.id,
+
+                        attendance_date:
+                            date,
+
+                        status:
+                            document.getElementById(
+                                "status-" + player.id
+                            ).value,
+
+                        session_id:
+                            sessionId
+
+                    };
+
+                });
+
+
+            saveButton.disabled = true;
+
+            saveButton.textContent =
+                "Saving Attendance...";
+
+
+            fetch("/api/attendance", {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body:
+                    JSON.stringify(
+                        attendanceRecords
+                    )
+
+            })
+
+            .then(function(response) {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to save attendance."
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(function(result) {
+
+                alert(
+                    "Attendance saved successfully!\n\n" +
+                    "Saved: " + (result.saved_count || 0) + "\n" +
+                    "Already recorded (skipped): " + (result.skipped_count || 0)
+                );
+
+
+                saveButton.disabled = false;
+
+                saveButton.textContent =
+                    "Save Attendance";
+
+
+                // Refresh the table so dropdowns return to -- Select --
+
+                loadTrainees();
+
+            })
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                alert(
+                    "Failed to save attendance."
+                );
+
+
+                saveButton.disabled = false;
+
+                saveButton.textContent =
+                    "Save Attendance";
+
+            });
+
+        }
+
+
+        // ==========================================
+        // START LOADING
+        // ==========================================
+
+        loadSessions();
+
+        loadTrainees();
+
+    </script>
+
+</body>
+
+</html>

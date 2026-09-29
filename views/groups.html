@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KICKSYNC - Training Groups</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
+        body { background: #f4f7fb; color: #1f2937; }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed; left: 0; top: 0; width: 240px; height: 100vh;
+            background: #062b5c; color: white; display: flex; flex-direction: column; z-index: 100;
+        }
+        .sidebar-brand {
+            height: 90px; display: flex; align-items: center; gap: 12px;
+            padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+        .brand-logo {
+            width: 45px; height: 45px; background: #f4c400; color: #062b5c;
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-size: 19px; font-weight: bold;
+        }
+        .brand-text h2 { font-size: 20px; margin-bottom: 3px; }
+        .brand-text span { font-size: 11px; color: #d5e2f2; }
+        .sidebar-nav { padding: 20px 12px; overflow-y: auto; flex: 1; }
+        .nav-title { font-size: 10px; color: #91a8c4; text-transform: uppercase; letter-spacing: 1px; margin: 10px 12px; }
+        .sidebar-nav a {
+            display: block; text-decoration: none; color: #dbe7f5; padding: 12px 14px;
+            margin-bottom: 4px; border-radius: 7px; font-size: 14px; transition: 0.2s;
+        }
+        .sidebar-nav a:hover { background: rgba(255,255,255,0.09); color: white; }
+        .sidebar-nav a.active { background: #f4c400; color: #062b5c; font-weight: bold; }
+        .sidebar-bottom { padding: 15px 12px; border-top: 1px solid rgba(255,255,255,0.12); }
+        .logout-link { display: block; text-decoration: none; color: #ffdddd; padding: 12px 14px; border-radius: 7px; font-size: 14px; }
+        .logout-link:hover { background: rgba(255,255,255,0.08); }
+
+        /* MAIN CONTENT */
+        .main-content { margin-left: 240px; min-height: 100vh; }
+        .top-header {
+            height: 75px; background: white; border-bottom: 1px solid #e2e8f0;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 30px;
+        }
+        .top-header h1 { font-size: 22px; color: #062b5c; }
+        .top-header p { color: #6b7280; font-size: 13px; margin-top: 4px; }
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .header-badge { background: #fff7cc; color: #765f00; padding: 8px 13px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .btn-primary {
+            background: #062b5c; color: white; border: none; padding: 9px 16px;
+            border-radius: 7px; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .btn-primary:hover { background: #0b5cab; }
+        .page-content { padding: 30px; }
+        .page-intro { margin-bottom: 25px; }
+        .page-intro h2 { font-size: 24px; color: #062b5c; margin-bottom: 7px; }
+        .page-intro p { color: #6b7280; font-size: 14px; }
+
+        /* SUMMARY */
+        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 25px; }
+        .summary-card { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 3px 12px rgba(0,0,0,0.04); }
+        .summary-card span { display: block; color: #64748b; font-size: 12px; margin-bottom: 8px; }
+        .summary-card strong { font-size: 27px; color: #062b5c; }
+
+        /* GROUPS */
+        .groups-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+        .group-card { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 24px; box-shadow: 0 3px 12px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; }
+        .group-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .group-icon { width: 48px; height: 48px; border-radius: 10px; background: #eaf2fb; color: #0b5cab; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; }
+        .group-card h3 { color: #062b5c; font-size: 19px; margin-bottom: 5px; }
+        .group-card .group-type { color: #64748b; font-size: 12px; }
+        .member-count { text-align: right; }
+        .member-count strong { display: block; color: #062b5c; font-size: 24px; }
+        .member-count span { color: #64748b; font-size: 11px; }
+        .progress-area { margin-top: 18px; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 7px; font-size: 12px; color: #64748b; }
+        .progress-bar { height: 8px; background: #e5e7eb; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #0b5cab; border-radius: 10px; transition: width 0.3s ease; }
+        .group-footer { margin-top: 20px; padding-top: 15px; border-top: 1px solid #edf0f4; display: flex; align-items: center; justify-content: space-between; }
+        .group-footer span { color: #64748b; font-size: 12px; }
+        .btn-action { padding: 6px 12px; border-radius: 5px; font-size: 12px; text-decoration: none; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc; color: #334155; font-weight: bold; transition: 0.2s; }
+        .btn-action.primary { background: #eaf2fb; border-color: #bfdbfe; color: #0b5cab; }
+        .btn-action.primary:hover { background: #0b5cab; color: white; }
+
+        /* INFO & MODAL */
+        .info-panel { margin-top: 25px; background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 22px; }
+        .info-panel h3 { color: #062b5c; margin-bottom: 8px; font-size: 17px; }
+        .info-panel p { color: #64748b; font-size: 13px; line-height: 1.6; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(6, 43, 92, 0.4); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 10px; width: 100%; max-width: 450px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .modal-header h3 { color: #062b5c; font-size: 18px; }
+        .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #64748b; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; font-weight: bold; color: #475569; margin-bottom: 6px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; }
+        .modal-footer { margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; }
+        .btn-cancel { background: #e2e8f0; border: none; padding: 9px 15px; border-radius: 6px; font-size: 13px; cursor: pointer; color: #475569; }
+
+        @media (max-width: 900px) { .summary-grid, .groups-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 700px) { .sidebar { width: 200px; } .main-content { margin-left: 200px; } }
+        @media (max-width: 550px) { .sidebar { position: relative; width: 100%; height: auto; } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo">KS</div>
+            <div class="brand-text">
+                <h2>KICKSYNC</h2>
+                <span>Academy Management</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-title">Main</div>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/trainees">Trainees</a>
+            <a href="/register">Register Trainee</a>
+            <a href="/attendance">Attendance</a>
+            <a href="/sessions">Training Sessions</a>
+            <div class="nav-title">Management</div>
+            <a href="/qr">QR Attendance</a>
+            <a href="/report">Reports</a>
+            <a href="/groups" class="active">Groups</a>
+            <div class="nav-title">Account</div>
+            <a href="/profile">Profile</a>
+            <a href="/settings">Settings</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="/logout" class="logout-link">Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div>
+                <h1>Training Groups</h1>
+                <p>KICKSYNC Academy Training Management</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary" onclick="openModal('addTraineeModal')">+ Register Trainee</button>
+                <div class="header-badge">KCCA FC ACADEMY</div>
+            </div>
+        </header>
+
+        <section class="page-content">
+            <div class="page-intro">
+                <h2>Training Groups</h2>
+                <p>View and organize academy trainees according to their age division.</p>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <span>Total Groups</span>
+                    <strong>3</strong>
+                </div>
+                <div class="summary-card">
+                    <span>Total Members</span>
+                    <strong id="stat-total-members">0</strong>
+                </div>
+                <div class="summary-card">
+                    <span>Training Categories</span>
+                    <strong>3</strong>
+                </div>
+            </div>
+
+            <div class="groups-grid">
+                <!-- U15 -->
+                <div class="group-card">
+                    <div>
+                        <div class="group-header">
+                            <div style="display:flex; align-items:center; gap:14px;">
+                                <div class="group-icon">U15</div>
+                                <div>
+                                    <h3>Under 15 (U15)</h3>
+                                    <span class="group-type">Youth Foundation Development</span>
+                                </div>
+                            </div>
+                            <div class="member-count">
+                                <strong id="count-u15">0</strong>
+                                <span>Members</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group-footer">
+                        <span>Age Group: Under 15</span>
+                        <div class="card-actions">
+                            <a href="/trainees?group=u15" class="btn-action primary">View Members</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- U17 -->
+                <div class="group-card">
+                    <div>
+                        <div class="group-header">
+                            <div style="display:flex; align-items:center; gap:14px;">
+                                <div class="group-icon">U17</div>
+                                <div>
+                                    <h3>Under 17 (U17)</h3>
+                                    <span class="group-type">Intermediate Tactical Training</span>
+                                </div>
+                            </div>
+                            <div class="member-count">
+                                <strong id="count-u17">0</strong>
+                                <span>Members</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group-footer">
+                        <span>Age Group: Under 17</span>
+                        <div class="card-actions">
+                            <a href="/trainees?group=u17" class="btn-action primary">View Members</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- U20 -->
+                <div class="group-card">
+                    <div>
+                        <div class="group-header">
+                            <div style="display:flex; align-items:center; gap:14px;">
+                                <div class="group-icon">U20</div>
+                                <div>
+                                    <h3>Under 20 (U20)</h3>
+                                    <span class="group-type">Elite & Competitive Prep</span>
+                                </div>
+                            </div>
+                            <div class="member-count">
+                                <strong id="count-u20">0</strong>
+                                <span>Members</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group-footer">
+                        <span>Age Group: Under 20</span>
+                        <div class="card-actions">
+                            <a href="/trainees?group=u20" class="btn-action primary">View Members</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <h3>About Training Groups</h3>
+                <p>Training groups help coaches organize academy trainees according to their age division and technical readiness. The U15 group focuses on fundamental skills and physical growth, U17 emphasizes tactical development, and U20 prepares elite players for senior competition.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- REGISTER TRAINEE MODAL -->
+    <div class="modal-overlay" id="addTraineeModal" role="dialog" aria-modal="true">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Register New Trainee</h3>
+                <button class="close-btn" onclick="closeModal('addTraineeModal')">&times;</button>
+            </div>
+            <form id="registerForm" onsubmit="handleTraineeRegistration(event)">
+                <div class="form-group">
+                    <label for="trainee_name">Trainee Full Name</label>
+                    <input type="text" id="trainee_name" placeholder="e.g. Mukasa David" required>
+                </div>
+                <div class="form-group">
+                    <label for="trainee_group">Select Training Group</label>
+                    <select id="trainee_group" required>
+                        <option value="" disabled selected>-- Select Group --</option>
+                        <option value="u15">Under 15 (U15)</option>
+                        <option value="u17">Under 17 (U17)</option>
+                        <option value="u20">Under 20 (U20)</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeModal('addTraineeModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Trainee</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    // Fetch live counts from Express backend API
+    async function fetchGroupData() {
+        try {
+            const response = await fetch('/api/groups/stats');
+            if (!response.ok) throw new Error('Network response failed');
+            const data = await response.json();
+            updateDashboard(data);
+        } catch (err) {
+            console.error('Failed to load group statistics:', err);
+        }
+    }
+
+    // Render metrics to UI
+    function updateDashboard(counts) {
+        const totalMembers =
+            (counts.u15 || 0) +
+            (counts.u17 || 0) +
+            (counts.u20 || 0);
+
+        document.getElementById('stat-total-members').innerText = totalMembers;
+
+        ['u15', 'u17', 'u20'].forEach(group => {
+            const count = counts[group] || 0;
+            document.getElementById(`count-${group}`).innerText = count;
+        });
+    }
+
+    // Handle adding a trainee via API call
+    async function handleTraineeRegistration(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('trainee_name').value.trim();
+        const group = document.getElementById('trainee_group').value;
+
+        if (!name || !group) return;
+
+        try {
+            const response = await fetch('/api/trainees', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, group })
+            });
+
+            if (response.ok) {
+                closeModal('addTraineeModal');
+                fetchGroupData();
+            } else {
+                const errData = await response.json();
+                alert(errData.message || 'Error registering trainee');
+            }
+        } catch (err) {
+            console.error('Failed to register trainee:', err);
+        }
+    }
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+        document.getElementById('registerForm').reset();
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchGroupData);
+</script>

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KICKSYNC - Attendance Reports</title>
+
+    <link rel="stylesheet" href="/CSS/style.css">
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+    <!-- =========================================
+         SIDEBAR
+         ========================================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-name">
+                <span class="kick">KICK</span><span class="sync">SYNC</span>
+            </div>
+
+            <div class="brand-subtitle">
+                KCCA ACADEMY MANAGEMENT SYSTEM
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/trainees" class="nav-item">
+                <span class="nav-icon">♟</span>
+                <span>Trainees</span>
+            </a>
+
+            <a href="/sessions" class="nav-item">
+                <span class="nav-icon">▣</span>
+                <span>Training Sessions</span>
+            </a>
+
+            <a href="/attendance" class="nav-item">
+                <span class="nav-icon">✓</span>
+                <span>Attendance</span>
+            </a>
+
+            <a href="/qr" class="nav-item">
+                <span class="nav-icon">▦</span>
+                <span>QR Code</span>
+            </a>
+
+            <a href="/report" class="nav-item active">
+                <span class="nav-icon">▥</span>
+                <span>Reports</span>
+            </a>
+
+            <a href="/groups" class="nav-item">
+                <span class="nav-icon">♟</span>
+                <span>Groups</span>
+            </a>
+
+            <a href="/profile" class="nav-item">
+                <span class="nav-icon">●</span>
+                <span>Profile</span>
+            </a>
+
+            <a href="/settings" class="nav-item">
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+
+            <a href="/logout" class="nav-item logout-item">
+                <span class="nav-icon">⇥</span>
+                <span>Logout</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <p>Developing Talent</p>
+
+            <p>Building Tomorrow</p>
+
+            <div class="yellow-line"></div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================================
+         MAIN CONTENT
+         ========================================= -->
+
+    <main class="main-content">
+
+
+        <!-- TOP HEADER -->
+
+        <header class="top-header">
+
+            <div class="kcca-heading">
+
+                <div class="kcca-icon">
+                    ▣
+                </div>
+
+                <div>
+
+                    <strong>
+                        Kampala Capital City Authority
+                    </strong>
+
+                    <span>
+                        Better City • Brighter Future
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <div class="date-display">
+
+                    <span class="calendar-icon">
+                        ▣
+                    </span>
+
+                    <span id="currentDate">
+                        Loading...
+                    </span>
+
+                </div>
+
+
+                <div class="coach-profile">
+
+                    <div class="profile-circle">
+                        ●
+                    </div>
+
+                    <span>
+                        Coach
+                    </span>
+
+                    <span class="dropdown-arrow">
+                        ▾
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================================
+             REPORT CONTENT
+             ========================================= -->
+
+        <section class="dashboard-content">
+
+
+            <div class="kcca-watermark">
+                KCCA
+
+                <small>
+                    KAMPALA CAPITAL CITY AUTHORITY
+                </small>
+            </div>
+
+
+
+            <!-- PAGE TITLE -->
+
+            <div class="welcome-section">
+
+                <h1>
+                    Attendance Reports
+                </h1>
+
+                <p>
+                    View and monitor KCCA Academy trainee attendance.
+                </p>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 SUMMARY CARDS
+                 ===================================== -->
+
+            <section class="stats-grid">
+
+
+                <!-- TOTAL -->
+
+                <div class="stat-card blue-card">
+
+                    <div class="stat-icon blue-icon">
+                        ▤
+                    </div>
+
+                    <div class="stat-information">
+
+                        <h3>
+                            Total Records
+                        </h3>
+
+                        <strong id="totalRecords">
+                            ...
+                        </strong>
+
+                        <p class="stat-change">
+                            Attendance records
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PRESENT -->
+
+                <div class="stat-card green-card">
+
+                    <div class="stat-icon green-icon">
+                        ✓
+                    </div>
+
+                    <div class="stat-information">
+
+                        <h3>
+                            Present
+                        </h3>
+
+                        <strong id="totalPresent">
+                            ...
+                        </strong>
+
+                        <p class="stat-change">
+                            Trainees present
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ABSENT -->
+
+                <div class="stat-card yellow-card">
+
+                    <div class="stat-icon yellow-icon">
+                        !
+                    </div>
+
+                    <div class="stat-information">
+
+                        <h3>
+                            Absent
+                        </h3>
+
+                        <strong id="totalAbsent">
+                            ...
+                        </strong>
+
+                        <p class="stat-change">
+                            Trainees absent
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PERCENTAGE -->
+
+                <div class="stat-card purple-card">
+
+                    <div class="stat-icon purple-icon">
+                        %
+                    </div>
+
+                    <div class="stat-information">
+
+                        <h3>
+                            Attendance Rate
+                        </h3>
+
+                        <strong id="attendancePercentage">
+                            ...
+                        </strong>
+
+                        <p class="stat-change">
+                            Overall attendance
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =====================================
+                 REPORT PANEL
+                 ===================================== -->
+
+            <div class="dashboard-panel report-main-panel">
+
+
+                <!-- REPORT HEADER -->
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="panel-icon">
+                            ▥
+                        </span>
+
+                        <h2>
+                            Attendance Records
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="print-button"
+                        onclick="window.print()"
+                    >
+                        Print Report
+                    </button>
+
+                </div>
+
+
+
+                <!-- REPORT TABLE -->
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ID
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Trainee
+                                </th>
+
+                                <th>
+                                    Age
+                                </th>
+
+                                <th>
+                                    Position
+                                </th>
+
+                                <th>
+                                    Training Session
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="reportTable">
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="loading"
+                                >
+                                    Loading attendance records...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =====================================
+                 REPORT FOOTER
+                 ===================================== -->
+
+            <div class="report-note">
+
+                <strong>
+                    KICKSYNC Attendance Report
+                </strong>
+
+                <span>
+                    Generated from the academy attendance records.
+                </span>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+         ========================================= -->
+
+    <script>
+
+
+        /* =========================================
+           CURRENT DATE
+           ========================================= */
+
+        const currentDate = new Date();
+
+        const dateOptions = {
+            weekday: "short",
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        };
+
+        document.getElementById(
+            "currentDate"
+        ).textContent =
+            currentDate.toLocaleDateString(
+                "en-GB",
+                dateOptions
+            );
+
+
+
+        /* =========================================
+           SESSION DATA
+           ========================================= */
+
+        let sessions = [];
+
+
+
+        /* =========================================
+           FORMAT DATE
+           ========================================= */
+
+        function formatDate(dateValue) {
+
+            if (!dateValue) {
+                return "";
+            }
+
+            const date = new Date(dateValue);
+
+            if (isNaN(date.getTime())) {
+                return dateValue;
+            }
+
+            return date.getFullYear() +
+                "-" +
+                String(
+                    date.getMonth() + 1
+                ).padStart(2, "0") +
+                "-" +
+                String(
+                    date.getDate()
+                ).padStart(2, "0");
+        }
+
+
+
+        /* =========================================
+           FIND SESSION
+           ========================================= */
+
+        function getSessionName(sessionId) {
+
+            if (!sessionId) {
+                return "Not linked";
+            }
+
+            const session =
+                sessions.find(
+                    function(item) {
+
+                        return String(item.id) ===
+                            String(sessionId);
+
+                    }
+                );
+
+
+            if (!session) {
+                return "Unknown session";
+            }
+
+
+            const formattedDate =
+                formatDate(
+                    session.session_date
+                );
+
+
+            return formattedDate +
+                " - " +
+                session.session_time +
+                " - " +
+                session.session_type;
+        }
+
+
+
+        /* =========================================
+           LOAD SESSIONS
+           ========================================= */
+
+        function loadSessions() {
+
+            return fetch("/api/sessions")
+
+                .then(function(response) {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Could not load training sessions."
+                        );
+
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(function(data) {
+
+                    sessions = data;
+
+                });
+
+        }
+
+
+
+        /* =========================================
+           LOAD REPORT
+           ========================================= */
+
+        function loadReport() {
+
+            fetch("/api/attendance/report")
+
+                .then(function(response) {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Could not load attendance report."
+                        );
+
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(function(records) {
+
+
+                    const table =
+                        document.getElementById(
+                            "reportTable"
+                        );
+
+
+                    table.innerHTML = "";
+
+
+                    let present = 0;
+
+                    let absent = 0;
+
+
+
+                    /* =============================
+                       COUNT PRESENT AND ABSENT
+                       ============================= */
+
+                    records.forEach(
+                        function(record) {
+
+                            if (
+                                record.status ===
+                                "Present"
+                            ) {
+
+                                present++;
+
+                            }
+
+
+                            if (
+                                record.status ===
+                                "Absent"
+                            ) {
+
+                                absent++;
+
+                            }
+
+                        }
+                    );
+
+
+
+                    /* =============================
+                       CREATE TABLE ROWS
+                       ============================= */
+
+                    records.forEach(
+                        function(record) {
+
+
+                            const row =
+                                document.createElement(
+                                    "tr"
+                                );
+
+
+                            let statusClass =
+                                "status-badge";
+
+
+                            if (
+                                record.status ===
+                                "Absent"
+                            ) {
+
+                                statusClass +=
+                                    " absent-status";
+
+                            }
+
+
+
+                            row.innerHTML = `
+
+                                <td>
+                                    ${record.id}
+                                </td>
+
+                                <td>
+                                    ${formatDate(
+                                        record.attendance_date
+                                    )}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        ${record.full_name}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    ${record.age}
+                                </td>
+
+                                <td>
+                                    ${record.position}
+                                </td>
+
+                                <td>
+                                    ${getSessionName(
+                                        record.session_id
+                                    )}
+                                </td>
+
+                                <td>
+                                    <span
+                                        class="${statusClass}"
+                                    >
+                                        ${record.status}
+                                    </span>
+                                </td>
+
+                            `;
+
+
+                            table.appendChild(row);
+
+                        }
+                    );
+
+
+
+                    /* =============================
+                       NO RECORDS
+                       ============================= */
+
+                    if (records.length === 0) {
+
+                        table.innerHTML = `
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="empty-message"
+                                >
+                                    No attendance records found.
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+
+
+
+                    /* =============================
+                       CALCULATE PERCENTAGE
+                       ============================= */
+
+                    const total =
+                        records.length;
+
+
+                    let percentage = 0;
+
+
+                    if (total > 0) {
+
+                        percentage =
+                            (present / total) * 100;
+
+                    }
+
+
+
+                    /* =============================
+                       UPDATE SUMMARY
+                       ============================= */
+
+                    document.getElementById(
+                        "totalRecords"
+                    ).textContent =
+                        total;
+
+
+                    document.getElementById(
+                        "totalPresent"
+                    ).textContent =
+                        present;
+
+
+                    document.getElementById(
+                        "totalAbsent"
+                    ).textContent =
+                        absent;
+
+
+                    document.getElementById(
+                        "attendancePercentage"
+                    ).textContent =
+                        percentage.toFixed(1) + "%";
+
+                })
+
+
+                .catch(function(error) {
+
+                    console.error(error);
+
+
+                    document.getElementById(
+                        "reportTable"
+                    ).innerHTML = `
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="empty-message"
+                            >
+                                Error loading attendance report.
+                            </td>
+
+                        </tr>
+
+                    `;
+
+
+                    document.getElementById(
+                        "totalRecords"
+                    ).textContent = "Error";
+
+
+                    document.getElementById(
+                        "totalPresent"
+                    ).textContent = "Error";
+
+
+                    document.getElementById(
+                        "totalAbsent"
+                    ).textContent = "Error";
+
+
+                    document.getElementById(
+                        "attendancePercentage"
+                    ).textContent = "Error";
+
+                });
+
+        }
+
+
+
+        /* =========================================
+           START REPORT
+           ========================================= */
+
+        loadSessions()
+
+            .then(function() {
+
+                loadReport();
+
+            })
+
+            .catch(function(error) {
+
+                console.error(error);
+
+
+                document.getElementById(
+                    "reportTable"
+                ).innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty-message"
+                        >
+                            Error loading training sessions.
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+
+    </script>
+
+</body>
+
+</html>

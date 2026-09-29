@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>KICKSYNC - Edit Trainee</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: #062b5c;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+
+        }
+
+
+        .sidebar-brand {
+
+            height: 90px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 20px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.12);
+
+        }
+
+
+        .brand-logo {
+
+            width: 45px;
+            height: 45px;
+
+            background: #f4c400;
+
+            color: #062b5c;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+        }
+
+
+        .brand-text h2 {
+
+            font-size: 20px;
+
+            margin-bottom: 3px;
+
+        }
+
+
+        .brand-text span {
+
+            font-size: 11px;
+
+            color: #d5e2f2;
+
+        }
+
+
+        .sidebar-nav {
+
+            padding: 20px 12px;
+
+            overflow-y: auto;
+
+            flex: 1;
+
+        }
+
+
+        .nav-title {
+
+            font-size: 10px;
+
+            color: #91a8c4;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin: 10px 12px;
+
+        }
+
+
+        .sidebar-nav a {
+
+            display: block;
+
+            text-decoration: none;
+
+            color: #dbe7f5;
+
+            padding: 12px 14px;
+
+            margin-bottom: 4px;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+
+        }
+
+
+        .sidebar-nav a:hover {
+
+            background:
+                rgba(255,255,255,0.09);
+
+            color: white;
+
+        }
+
+
+        .sidebar-nav a.active {
+
+            background: #f4c400;
+
+            color: #062b5c;
+
+            font-weight: bold;
+
+        }
+
+
+        .sidebar-bottom {
+
+            padding: 15px 12px;
+
+            border-top:
+                1px solid rgba(255,255,255,0.12);
+
+        }
+
+
+        .logout-link {
+
+            display: block;
+
+            text-decoration: none;
+
+            color: #ffdddd;
+
+            padding: 12px 14px;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+        }
+
+
+        .logout-link:hover {
+
+            background:
+                rgba(255,255,255,0.08);
+
+        }
+
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-content {
+
+            margin-left: 240px;
+
+            min-height: 100vh;
+
+        }
+
+
+        .top-header {
+
+            height: 75px;
+
+            background: white;
+
+            border-bottom:
+                1px solid #e2e8f0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 30px;
+
+        }
+
+
+        .top-header h1 {
+
+            font-size: 22px;
+
+            color: #062b5c;
+
+        }
+
+
+        .top-header p {
+
+            color: #6b7280;
+
+            font-size: 13px;
+
+            margin-top: 4px;
+
+        }
+
+
+        .header-badge {
+
+            background: #fff7cc;
+
+            color: #765f00;
+
+            padding: 8px 13px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+        }
+
+
+        .page-content {
+
+            padding: 30px;
+
+        }
+
+
+        .page-intro {
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .page-intro h2 {
+
+            font-size: 24px;
+
+            color: #062b5c;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .page-intro p {
+
+            color: #6b7280;
+
+            font-size: 14px;
+
+        }
+
+
+
+        /* =========================
+           EDIT FORM
+        ========================= */
+
+        .form-panel {
+
+            max-width: 700px;
+
+            background: white;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 10px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.04);
+
+        }
+
+
+        .form-panel h3 {
+
+            color: #062b5c;
+
+            font-size: 18px;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .form-description {
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .form-group {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            color: #374151;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .form-group input,
+        .form-group select {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 7px;
+
+            background: white;
+
+            font-size: 14px;
+
+            color: #374151;
+
+            outline: none;
+
+        }
+
+
+        .form-group input:focus,
+        .form-group select:focus {
+
+            border-color: #0b5cab;
+
+            box-shadow:
+                0 0 0 3px rgba(11,92,171,0.1);
+
+        }
+
+
+        .form-actions {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 25px;
+
+            padding-top: 20px;
+
+            border-top:
+                1px solid #edf0f4;
+
+        }
+
+
+        .save-button {
+
+            padding: 12px 22px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #0b5cab;
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .save-button:hover {
+
+            background: #08477f;
+
+        }
+
+
+        .save-button:disabled {
+
+            background: #94a3b8;
+
+            cursor: not-allowed;
+
+        }
+
+
+        .cancel-button {
+
+            padding: 12px 22px;
+
+            border-radius: 7px;
+
+            background: white;
+
+            color: #475569;
+
+            border:
+                1px solid #cbd5e1;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+        }
+
+
+        .cancel-button:hover {
+
+            background: #f8fafc;
+
+        }
+
+
+        .message {
+
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 12px 15px;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+
+        }
+
+
+        .message.show {
+
+            display: block;
+
+        }
+
+
+        .message.error {
+
+            background: #fdecec;
+
+            color: #b42318;
+
+        }
+
+
+        .message.success {
+
+            background: #e8f7ee;
+
+            color: #177245;
+
+        }
+
+
+        .loading-text {
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+
+                width: 200px;
+
+            }
+
+
+            .main-content {
+
+                margin-left: 200px;
+
+            }
+
+
+            .top-header {
+
+                padding: 0 18px;
+
+            }
+
+
+            .page-content {
+
+                padding: 20px;
+
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .sidebar {
+
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+            }
+
+
+            .sidebar-nav {
+
+                max-height: 300px;
+
+            }
+
+
+            .main-content {
+
+                margin-left: 0;
+
+            }
+
+
+            .top-header {
+
+                height: auto;
+
+                padding: 18px;
+
+            }
+
+
+            .header-badge {
+
+                display: none;
+
+            }
+
+
+            .form-actions {
+
+                flex-direction: column;
+
+            }
+
+
+            .save-button,
+            .cancel-button {
+
+                width: 100%;
+
+                text-align: center;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+
+                KS
+
+            </div>
+
+
+            <div class="brand-text">
+
+                <h2>KICKSYNC</h2>
+
+                <span>
+                    Academy Management
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <nav class="sidebar-nav">
+
+
+            <div class="nav-title">
+                Main
+            </div>
+
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+
+            <a href="/trainees" class="active">
+                Trainees
+            </a>
+
+
+            <a href="/register">
+                Register Trainee
+            </a>
+
+
+            <a href="/attendance">
+                Attendance
+            </a>
+
+
+            <a href="/sessions">
+                Training Sessions
+            </a>
+
+
+
+            <div class="nav-title">
+                Management
+            </div>
+
+
+            <a href="/qr">
+                QR Attendance
+            </a>
+
+
+            <a href="/report">
+                Reports
+            </a>
+
+
+            <a href="/groups">
+                Groups
+            </a>
+
+
+
+            <div class="nav-title">
+                Account
+            </div>
+
+
+            <a href="/profile">
+                Profile
+            </a>
+
+
+            <a href="/settings">
+                Settings
+            </a>
+
+
+        </nav>
+
+
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="/logout"
+                class="logout-link"
+            >
+                Logout
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <main class="main-content">
+
+
+        <header class="top-header">
+
+            <div>
+
+                <h1>
+                    Edit Trainee
+                </h1>
+
+                <p>
+                    KICKSYNC Academy Training Management
+                </p>
+
+            </div>
+
+
+            <div class="header-badge">
+                KCCA FC ACADEMY
+            </div>
+
+        </header>
+
+
+
+        <section class="page-content">
+
+
+            <div class="page-intro">
+
+                <h2>
+                    Edit Trainee Information
+                </h2>
+
+                <p>
+                    Update the selected trainee's information
+                    below.
+                </p>
+
+            </div>
+
+
+
+            <div class="form-panel">
+
+
+                <h3>
+                    Trainee Details
+                </h3>
+
+
+                <p class="form-description">
+
+                    Make the required changes and click
+                    <strong>Save Changes</strong> when finished.
+
+                </p>
+
+
+                <p
+                    id="loadingText"
+                    class="loading-text"
+                >
+                    Loading trainee information...
+
+                </p>
+
+
+
+                <form id="editForm">
+
+
+                    <!-- FULL NAME -->
+
+                    <div class="form-group">
+
+                        <label for="full_name">
+                            Full Name
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="full_name"
+                            name="full_name"
+                            placeholder="Enter full name"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- AGE -->
+
+                    <div class="form-group">
+
+                        <label for="age">
+                            Age
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="age"
+                            name="age"
+                            min="1"
+                            max="100"
+                            placeholder="Enter age"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- POSITION -->
+
+                    <div class="form-group">
+
+                        <label for="position">
+                            Position
+                        </label>
+
+
+                        <select
+                            id="position"
+                            name="position"
+                            required
+                        >
+
+                            <option value="">
+                                Select position
+                            </option>
+
+
+                            <option value="Goalkeeper">
+                                Goalkeeper
+                            </option>
+
+
+                            <option value="Defender">
+                                Defender
+                            </option>
+
+
+                            <option value="Midfielder">
+                                Midfielder
+                            </option>
+
+
+                            <option value="Forward">
+                                Forward
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="form-actions">
+
+
+                        <button
+                            type="submit"
+                            id="saveButton"
+                            class="save-button"
+                        >
+                            Save Changes
+                        </button>
+
+
+                        <a
+                            href="/trainees"
+                            class="cancel-button"
+                        >
+                            Cancel
+                        </a>
+
+
+                    </div>
+
+
+                </form>
+
+
+
+                <div
+                    id="message"
+                    class="message"
+                ></div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <script>
+
+
+        // ==========================================
+        // GET TRAINEE ID FROM URL
+        // ==========================================
+
+        const id =
+            window.location.pathname
+                .split("/")
+                .pop();
+
+
+
+        const editForm =
+            document.getElementById(
+                "editForm"
+            );
+
+
+        const saveButton =
+            document.getElementById(
+                "saveButton"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        const loadingText =
+            document.getElementById(
+                "loadingText"
+            );
+
+
+
+        // ==========================================
+        // SHOW MESSAGE
+        // ==========================================
+
+        function showMessage(
+            text,
+            type
+        ) {
+
+            message.textContent =
+                text;
+
+            message.className =
+                "message show " +
+                type;
+
+        }
+
+
+
+        // ==========================================
+        // LOAD TRAINEE
+        // ==========================================
+
+        fetch(
+            "/api/trainees/" + id
+        )
+
+        .then(function(response) {
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Trainee not found."
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+
+        .then(function(player) {
+
+
+            document.getElementById(
+                "full_name"
+            ).value =
+                player.full_name || "";
+
+
+            document.getElementById(
+                "age"
+            ).value =
+                player.age || "";
+
+
+            document.getElementById(
+                "position"
+            ).value =
+                player.position || "";
+
+
+            loadingText.style.display =
+                "none";
+
+        })
+
+
+        .catch(function(error) {
+
+
+            console.error(error);
+
+
+            loadingText.textContent =
+                "Could not load trainee information.";
+
+
+            showMessage(
+                "Could not load trainee.",
+                "error"
+            );
+
+
+            saveButton.disabled =
+                true;
+
+        });
+
+
+
+        // ==========================================
+        // SAVE CHANGES
+        // ==========================================
+
+        editForm.addEventListener(
+            "submit",
+            function(event) {
+
+
+                event.preventDefault();
+
+
+
+                const full_name =
+                    document.getElementById(
+                        "full_name"
+                    ).value.trim();
+
+
+                const age =
+                    document.getElementById(
+                        "age"
+                    ).value;
+
+
+                const position =
+                    document.getElementById(
+                        "position"
+                    ).value;
+
+
+
+                if (
+                    !full_name ||
+                    !age ||
+                    !position
+                ) {
+
+                    showMessage(
+                        "Please complete all fields.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+
+                saveButton.disabled =
+                    true;
+
+
+                saveButton.textContent =
+                    "Saving...";
+
+
+
+                fetch(
+                    "/api/trainees/" +
+                    id +
+                    "/update",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/x-www-form-urlencoded"
+
+                        },
+
+                        body:
+
+                            "full_name=" +
+                            encodeURIComponent(
+                                full_name
+                            ) +
+
+                            "&age=" +
+                            encodeURIComponent(
+                                age
+                            ) +
+
+                            "&position=" +
+                            encodeURIComponent(
+                                position
+                            )
+
+                    }
+                )
+
+
+                .then(function(response) {
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Update failed."
+                        );
+
+                    }
+
+
+                    showMessage(
+                        "Trainee updated successfully.",
+                        "success"
+                    );
+
+
+                    setTimeout(
+                        function() {
+
+                            window.location.href =
+                                "/trainees";
+
+                        },
+                        700
+                    );
+
+
+                })
+
+
+                .catch(function(error) {
+
+
+                    console.error(
+                        error
+                    );
+
+
+                    showMessage(
+                        "Failed to update trainee.",
+                        "error"
+                    );
+
+
+                    saveButton.disabled =
+                        false;
+
+
+                    saveButton.textContent =
+                        "Save Changes";
+
+                });
+
+            }
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>

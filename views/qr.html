@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KICKSYNC - QR Attendance</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #062b5c;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            height: 90px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            background: #f4c400;
+            color: #062b5c;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .brand-text h2 {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: #d5e2f2;
+        }
+
+        .sidebar-nav {
+            padding: 20px 12px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .nav-title {
+            font-size: 10px;
+            color: #91a8c4;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px 12px;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            text-decoration: none;
+            color: #dbe7f5;
+            padding: 12px 14px;
+            margin-bottom: 4px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255,255,255,0.09);
+            color: white;
+        }
+
+        .sidebar-nav a.active {
+            background: #f4c400;
+            color: #062b5c;
+            font-weight: bold;
+        }
+
+        .sidebar-bottom {
+            padding: 15px 12px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .logout-link {
+            display: block;
+            text-decoration: none;
+            color: #ffdddd;
+            padding: 12px 14px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .logout-link:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-content {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .top-header h1 {
+            font-size: 22px;
+            color: #062b5c;
+        }
+
+        .top-header p {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .header-badge {
+            background: #fff7cc;
+            color: #765f00;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .page-content {
+            padding: 30px;
+        }
+
+        .page-intro {
+            margin-bottom: 25px;
+        }
+
+        .page-intro h2 {
+            font-size: 24px;
+            color: #062b5c;
+            margin-bottom: 7px;
+        }
+
+        .page-intro p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* =========================
+           QR PANEL
+        ========================= */
+
+        .qr-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .panel h3 {
+            color: #062b5c;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .panel-description {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .session-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background: white;
+            font-size: 14px;
+            color: #374151;
+            outline: none;
+        }
+
+        .session-select:focus {
+            border-color: #0b5cab;
+            box-shadow: 0 0 0 3px rgba(11,92,171,0.1);
+        }
+
+        .generate-button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: #0b5cab;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .generate-button:hover {
+            background: #08477f;
+        }
+
+        .generate-button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           QR DISPLAY
+        ========================= */
+
+        .qr-panel {
+            min-height: 430px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .qr-placeholder {
+            width: 180px;
+            height: 180px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 15px auto 20px;
+        }
+
+        #qrContainer img {
+            width: 300px;
+            height: 300px;
+            max-width: 100%;
+            border: 8px solid white;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.12);
+            border-radius: 8px;
+        }
+
+        #message {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 7px;
+            margin-top: 18px;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+        }
+
+        #message.show {
+            display: block;
+        }
+
+        #message.success {
+            background: #e8f7ee;
+            color: #177245;
+        }
+
+        #message.error {
+            background: #fdecec;
+            color: #b42318;
+        }
+
+        #message.loading {
+            background: #eef5ff;
+            color: #145da0;
+        }
+
+        .qr-instructions {
+            margin-top: 22px;
+            width: 100%;
+            text-align: left;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .qr-instructions h4 {
+            color: #062b5c;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .qr-instructions p {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .session-info {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-left: 4px solid #f4c400;
+            border-radius: 6px;
+            text-align: left;
+        }
+
+        .session-info strong {
+            color: #062b5c;
+        }
+
+        .session-info div {
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+            .qr-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+
+            .top-header {
+                padding: 0 18px;
+            }
+
+            .page-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-nav {
+                max-height: 300px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .top-header {
+                height: auto;
+                padding: 18px;
+                gap: 10px;
+            }
+
+            .header-badge {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                KS
+            </div>
+
+            <div class="brand-text">
+                <h2>KICKSYNC</h2>
+                <span>Academy Management</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-title">
+                Main
+            </div>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/trainees">
+                Trainees
+            </a>
+
+            <a href="/register">
+                Register Trainee
+            </a>
+
+            <a href="/attendance">
+                Attendance
+            </a>
+
+            <a href="/sessions">
+                Training Sessions
+            </a>
+
+
+            <div class="nav-title">
+                Management
+            </div>
+
+            <a href="/qr" class="active">
+                QR Attendance
+            </a>
+
+            <a href="/report">
+                Reports
+            </a>
+
+            <a href="/groups">
+                Groups
+            </a>
+
+
+            <div class="nav-title">
+                Account
+            </div>
+
+            <a href="/profile">
+                Profile
+            </a>
+
+            <a href="/settings">
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="/logout" class="logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <main class="main-content">
+
+        <header class="top-header">
+
+            <div>
+                <h1>QR Attendance</h1>
+                <p>KICKSYNC Academy Training Management</p>
+            </div>
+
+            <div class="header-badge">
+                KCCA FC ACADEMY
+            </div>
+
+        </header>
+
+
+
+        <section class="page-content">
+
+            <div class="page-intro">
+
+                <h2>QR Attendance</h2>
+
+                <p>
+                    Generate a QR code for a training session so trainee attendance
+                    can be recorded quickly.
+                </p>
+
+            </div>
+
+
+
+            <div class="qr-layout">
+
+
+                <!-- SESSION SELECTION -->
+
+                <div class="panel">
+
+                    <h3>Generate Attendance QR</h3>
+
+                    <p class="panel-description">
+                        Select the training session you want to use for attendance,
+                        then generate its QR code.
+                    </p>
+
+
+                    <label class="form-label" for="sessionSelect">
+                        Training Session
+                    </label>
+
+                    <select
+                        id="sessionSelect"
+                        class="session-select"
+                    >
+
+                        <option value="">
+                            -- Select Training Session --
+                        </option>
+
+                    </select>
+
+
+                    <button
+                        id="generateQR"
+                        class="generate-button"
+                    >
+                        Generate QR Code
+                    </button>
+
+
+                    <div id="message"></div>
+
+
+                    <div
+                        id="sessionInfo"
+                        class="session-info"
+                    >
+
+                        <div>
+                            <strong>Session:</strong>
+                            <span id="selectedSession"></span>
+                        </div>
+
+                        <div>
+                            <strong>Date:</strong>
+                            <span id="selectedDate"></span>
+                        </div>
+
+                        <div>
+                            <strong>Time:</strong>
+                            <span id="selectedTime"></span>
+                        </div>
+
+                        <div>
+                            <strong>Location:</strong>
+                            <span id="selectedLocation"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QR DISPLAY -->
+
+                <div class="panel qr-panel">
+
+                    <h3>Attendance QR Code</h3>
+
+                    <p class="panel-description">
+                        Display the generated QR code at the training ground
+                        for trainees to scan.
+                    </p>
+
+
+                    <div id="qrContainer">
+
+                        <div class="qr-placeholder">
+                            QR code will appear here
+                        </div>
+
+                    </div>
+
+
+                    <div class="qr-instructions">
+
+                        <h4>How it works</h4>
+
+                        <p>
+                            1. Select a training session.<br>
+                            2. Click <strong>Generate QR Code</strong>.<br>
+                            3. Display the QR code to trainees.<br>
+                            4. Trainees scan the code to record attendance.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <script>
+
+        const sessionSelect =
+            document.getElementById("sessionSelect");
+
+        const generateQR =
+            document.getElementById("generateQR");
+
+        const qrContainer =
+            document.getElementById("qrContainer");
+
+        const message =
+            document.getElementById("message");
+
+        const sessionInfo =
+            document.getElementById("sessionInfo");
+
+        const selectedSession =
+            document.getElementById("selectedSession");
+
+        const selectedDate =
+            document.getElementById("selectedDate");
+
+        const selectedTime =
+            document.getElementById("selectedTime");
+
+        const selectedLocation =
+            document.getElementById("selectedLocation");
+
+
+        let sessions = [];
+
+
+
+        // =========================
+        // MESSAGE FUNCTION
+        // =========================
+
+        function showMessage(text, type) {
+
+            message.textContent = text;
+
+            message.className = "show " + type;
+
+        }
+
+
+
+        // =========================
+        // LOAD TRAINING SESSIONS
+        // =========================
+
+        fetch("/api/sessions")
+
+            .then(response => {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to load training sessions."
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(data => {
+
+                sessions = data;
+
+                data.forEach(session => {
+
+                    const option =
+                        document.createElement("option");
+
+                    option.value = session.id;
+
+                    option.textContent =
+                        session.session_date +
+                        " - " +
+                        session.session_time +
+                        " - " +
+                        session.session_type;
+
+                    sessionSelect.appendChild(option);
+
+                });
+
+            })
+
+            .catch(error => {
+
+                console.error(
+                    "Error loading sessions:",
+                    error
+                );
+
+                showMessage(
+                    "Failed to load training sessions.",
+                    "error"
+                );
+
+            });
+
+
+
+        // =========================
+        // SHOW SELECTED SESSION
+        // =========================
+
+        sessionSelect.addEventListener(
+            "change",
+            function () {
+
+                const sessionId =
+                    this.value;
+
+                if (!sessionId) {
+
+                    sessionInfo.style.display =
+                        "none";
+
+                    return;
+
+                }
+
+
+                const session =
+                    sessions.find(
+                        item =>
+                            String(item.id) ===
+                            String(sessionId)
+                    );
+
+
+                if (session) {
+
+                    selectedSession.textContent =
+                        session.session_type;
+
+                    selectedDate.textContent =
+                        session.session_date;
+
+                    selectedTime.textContent =
+                        session.session_time;
+
+                    selectedLocation.textContent =
+                        session.location;
+
+                    sessionInfo.style.display =
+                        "block";
+
+                }
+
+            }
+        );
+
+
+
+        // =========================
+        // GENERATE QR CODE
+        // =========================
+
+        generateQR.addEventListener(
+            "click",
+            function () {
+
+                const sessionId =
+                    sessionSelect.value;
+
+
+                if (!sessionId) {
+
+                    showMessage(
+                        "Please select a training session.",
+                        "error"
+                    );
+
+                    qrContainer.innerHTML = `
+                        <div class="qr-placeholder">
+                            Please select a session first
+                        </div>
+                    `;
+
+                    return;
+
+                }
+
+
+                showMessage(
+                    "Generating QR code...",
+                    "loading"
+                );
+
+
+                generateQR.disabled = true;
+
+
+                qrContainer.innerHTML = `
+                    <div class="qr-placeholder">
+                        Generating...
+                    </div>
+                `;
+
+
+                fetch(
+                    "/api/qr/" +
+                    sessionId
+                )
+
+                    .then(response => {
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                "QR generation failed."
+                            );
+
+                        }
+
+                        return response.json();
+
+                    })
+
+                    .then(data => {
+
+                        if (data.qr_code) {
+
+                            showMessage(
+                                "QR code generated successfully.",
+                                "success"
+                            );
+
+
+                            const image =
+                                document.createElement("img");
+
+                            image.src =
+                                data.qr_code;
+
+                            image.alt =
+                                "KICKSYNC Attendance QR Code";
+
+
+                            qrContainer.innerHTML = "";
+
+                            qrContainer.appendChild(
+                                image
+                            );
+
+                        }
+
+                        else {
+
+                            showMessage(
+                                "Unable to generate QR code.",
+                                "error"
+                            );
+
+                        }
+
+                    })
+
+                    .catch(error => {
+
+                        console.error(
+                            "Error generating QR code:",
+                            error
+                        );
+
+                        showMessage(
+                            "Error generating QR code.",
+                            "error"
+                        );
+
+
+                        qrContainer.innerHTML = `
+                            <div class="qr-placeholder">
+                                QR code could not be generated
+                            </div>
+                        `;
+
+                    })
+
+                    .finally(() => {
+
+                        generateQR.disabled = false;
+
+                    });
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

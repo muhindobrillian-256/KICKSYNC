@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>KICKSYNC - Dashboard</title>
+
+    <link rel="stylesheet" href="/CSS/style.css">
+
+
+    <!-- =========================================
+         DASHBOARD SIDEBAR FIX
+         ========================================= -->
+
+    <style>
+
+        /* =========================================
+           SIDEBAR
+           ========================================= */
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            background: #0066cc;
+            color: #ffffff;
+
+            padding: 22px 15px;
+
+            box-sizing: border-box;
+
+            z-index: 1000;
+
+            overflow-y: auto;
+        }
+
+
+        /* =========================================
+           BRAND
+           ========================================= */
+
+        .sidebar-brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+
+            min-width: 42px;
+
+            background: #ffd200;
+
+            color: #0047a8;
+
+            border-radius: 8px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 900;
+
+            font-size: 16px;
+        }
+
+
+        .sidebar-brand h2 {
+            margin: 0;
+
+            color: #ffffff;
+
+            font-size: 22px;
+
+            font-weight: 800;
+        }
+
+
+        .sidebar-brand span {
+            display: block;
+
+            margin-top: 3px;
+
+            color: #e8f1ff;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================
+           NAVIGATION
+           ========================================= */
+
+        .sidebar-nav {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 5px;
+
+            width: 100%;
+        }
+
+
+        .sidebar-nav a {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 11px 12px;
+
+            margin: 0;
+
+            border-radius: 7px;
+
+            background: transparent;
+
+            color: #ffffff !important;
+
+            text-decoration: none !important;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            line-height: 1.2;
+
+            transition: all 0.2s ease;
+        }
+
+
+        .sidebar-nav a span {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 21px;
+
+            min-width: 21px;
+
+            color: inherit !important;
+
+            text-decoration: none !important;
+
+            font-size: 16px;
+        }
+
+
+        .sidebar-nav a:hover {
+            background: rgba(255, 210, 0, 0.18);
+
+            color: #ffd200 !important;
+
+            text-decoration: none !important;
+        }
+
+
+        .sidebar-nav a.active {
+            background: #ffd200;
+
+            color: #0047a8 !important;
+
+            text-decoration: none !important;
+        }
+
+
+        /* =========================================
+           LOGOUT
+           ========================================= */
+
+        .sidebar-bottom {
+            margin-top: 25px;
+
+            padding-top: 18px;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+
+        .logout-link {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 11px 12px;
+
+            border-radius: 7px;
+
+            color: #ffffff !important;
+
+            text-decoration: none !important;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+
+        .logout-link:hover {
+            background: rgba(255, 255, 255, 0.12);
+
+            color: #ffd200 !important;
+
+            text-decoration: none !important;
+        }
+
+
+        .logout-link span {
+            width: 21px;
+
+            min-width: 21px;
+
+            text-align: center;
+        }
+
+
+        /* =========================================
+           MAIN CONTENT
+           ========================================= */
+
+        .main-content {
+            margin-left: 250px;
+
+            min-height: 100vh;
+
+            width: calc(100% - 250px);
+
+            box-sizing: border-box;
+        }
+
+
+        /* =========================================
+           MOBILE
+           ========================================= */
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+                width: 72px;
+
+                padding: 15px 8px;
+            }
+
+
+            .sidebar-brand {
+                justify-content: center;
+            }
+
+
+            .sidebar-brand > div:last-child {
+                display: none;
+            }
+
+
+            .sidebar-nav a {
+                justify-content: center;
+
+                padding: 11px 5px;
+
+                font-size: 0;
+            }
+
+
+            .sidebar-nav a span {
+                font-size: 17px;
+            }
+
+
+            .sidebar-bottom .logout-link {
+                justify-content: center;
+
+                font-size: 0;
+            }
+
+
+            .sidebar-bottom .logout-link span {
+                font-size: 17px;
+            }
+
+
+            .main-content {
+                margin-left: 72px;
+
+                width: calc(100% - 72px);
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+    <!-- =========================================
+         SIDEBAR
+         ========================================= -->
+
+    <aside class="sidebar">
+
+
+        <!-- KICKSYNC BRAND -->
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                KS
+            </div>
+
+
+            <div>
+
+                <h2>
+                    KICKSYNC
+                </h2>
+
+                <span>
+                    Academy Management
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-nav">
+
+
+            <a href="/dashboard" class="active">
+
+                <span>
+                    ▣
+                </span>
+
+                Dashboard
+
+            </a>
+
+
+            <a href="/trainees">
+
+                <span>
+                    ⚽
+                </span>
+
+                Trainees
+
+            </a>
+
+
+            <a href="/register">
+
+                <span>
+                    ＋
+                </span>
+
+                Register Trainee
+
+            </a>
+
+
+            <a href="/attendance">
+
+                <span>
+                    ✓
+                </span>
+
+                Attendance
+
+            </a>
+
+
+            <a href="/sessions">
+
+                <span>
+                    ▤
+                </span>
+
+                Training Sessions
+
+            </a>
+
+
+            <a href="/qr">
+
+                <span>
+                    ▦
+                </span>
+
+                QR Attendance
+
+            </a>
+
+
+            <a href="/report">
+
+                <span>
+                    ▥
+                </span>
+
+                Reports
+
+            </a>
+
+
+            <a href="/groups">
+
+                <span>
+                    👥
+                </span>
+
+                Groups
+
+            </a>
+
+
+            <a href="/profile">
+
+                <span>
+                    ◉
+                </span>
+
+                Profile
+
+            </a>
+
+
+            <a href="/settings">
+
+                <span>
+                    ⚙
+                </span>
+
+                Settings
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- LOGOUT -->
+
+        <div class="sidebar-bottom">
+
+            <a href="/logout" class="logout-link">
+
+                <span>
+                    ⇥
+                </span>
+
+                Logout
+
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- =========================================
+         MAIN CONTENT
+         ========================================= -->
+
+    <main class="main-content">
+
+
+        <!-- =========================================
+             TOP HEADER
+             ========================================= -->
+
+        <header class="top-header">
+
+
+            <div class="kcca-heading">
+
+
+                <div class="kcca-icon">
+                    ▣
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Kampala Capital City Authority
+                    </strong>
+
+
+                    <span>
+                        Better City • Brighter Future
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="header-right">
+
+
+                <div class="date-display">
+
+                    <span class="calendar-icon">
+                        ▣
+                    </span>
+
+                    <span id="currentDate">
+                        Loading...
+                    </span>
+
+                </div>
+
+
+                <div class="coach-profile">
+
+                    <div class="profile-circle">
+                        ●
+                    </div>
+
+                    <span>
+                        Coach
+                    </span>
+
+                    <span class="dropdown-arrow">
+                        ▾
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+        <!-- =========================================
+             DASHBOARD CONTENT
+             ========================================= -->
+
+        <section class="dashboard-content">
+
+
+            <!-- WATERMARK -->
+
+            <div class="kcca-watermark">
+
+                KCCA
+
+                <small>
+                    KAMPALA CAPITAL CITY AUTHORITY
+                </small>
+
+            </div>
+
+
+            <!-- WELCOME -->
+
+            <div class="welcome-section">
+
+                <h1>
+                    Welcome Back, Coach!
+                </h1>
+
+                <p>
+                    Here's what's happening with your KCCA Academy today.
+                </p>
+
+            </div>
+
+
+            <!-- =====================================
+                 STATISTICS
+                 ===================================== -->
+
+            <section class="stats-grid">
+
+
+                <!-- TOTAL TRAINEES -->
+
+                <div class="stat-card blue-card">
+
+                    <div class="stat-icon blue-icon">
+                        ♟
+                    </div>
+
+
+                    <div class="stat-information">
+
+                        <h3>
+                            Total Trainees
+                        </h3>
+
+
+                        <strong id="totalTrainees">
+                            ...
+                        </strong>
+
+
+                        <p class="stat-change">
+                            ↗ Academy trainees
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRAINING SESSIONS -->
+
+                <div class="stat-card yellow-card">
+
+                    <div class="stat-icon yellow-icon">
+                        ▣
+                    </div>
+
+
+                    <div class="stat-information">
+
+                        <h3>
+                            Training Sessions
+                        </h3>
+
+
+                        <strong id="totalSessions">
+                            ...
+                        </strong>
+
+
+                        <p class="stat-change">
+                            ↗ Training sessions
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ATTENDANCE -->
+
+                <div class="stat-card green-card">
+
+                    <div class="stat-icon green-icon">
+                        ✓
+                    </div>
+
+
+                    <div class="stat-information">
+
+                        <h3>
+                            Attendance Rate
+                        </h3>
+
+
+                        <strong id="attendanceRate">
+                            0%
+                        </strong>
+
+
+                        <p class="stat-change">
+                            ↗ Today's attendance
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- REPORTS -->
+
+                <div class="stat-card purple-card">
+
+                    <div class="stat-icon purple-icon">
+                        ▤
+                    </div>
+
+
+                    <div class="stat-information">
+
+                        <h3>
+                            Reports Generated
+                        </h3>
+
+
+                        <strong id="reportsGenerated">
+                            ...
+                        </strong>
+
+
+                        <p class="stat-change">
+                            ↗ Attendance records
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =====================================
+                 MIDDLE SECTION
+                 ===================================== -->
+
+            <section class="dashboard-columns">
+
+
+                <!-- =================================
+                     RECENT TRAINING SESSIONS
+                     ================================= -->
+
+                <div class="dashboard-panel sessions-panel">
+
+
+                    <div class="panel-header">
+
+
+                        <div>
+
+                            <span class="panel-icon">
+                                ▣
+                            </span>
+
+                            <h2>
+                                Recent Training Sessions
+                            </h2>
+
+                        </div>
+
+
+                        <a href="/sessions">
+                            View All →
+                        </a>
+
+
+                    </div>
+
+
+                    <div class="table-container">
+
+
+                        <table>
+
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Time
+                                    </th>
+
+                                    <th>
+                                        Session
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="sessionsTable">
+
+
+                                <tr>
+
+                                    <td
+                                        colspan="5"
+                                        class="loading"
+                                    >
+                                        Loading training sessions...
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+
+
+                        </table>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================
+                     ATTENDANCE OVERVIEW
+                     ================================= -->
+
+                <div class="dashboard-panel attendance-panel">
+
+
+                    <div class="panel-header">
+
+
+                        <div>
+
+                            <span class="panel-icon">
+                                ▥
+                            </span>
+
+                            <h2>
+                                Attendance Overview
+                            </h2>
+
+                        </div>
+
+
+                        <a href="/report">
+                            View Report →
+                        </a>
+
+
+                    </div>
+
+
+                    <div class="attendance-content">
+
+
+                        <div class="donut-container">
+
+
+                            <div
+                                class="attendance-donut"
+                                id="attendanceDonut"
+                            >
+
+
+                                <div class="donut-center">
+
+
+                                    <strong id="donutPercentage">
+                                        0%
+                                    </strong>
+
+
+                                    <span>
+                                        Attendance Rate
+                                    </span>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="attendance-legend">
+
+
+                            <div class="legend-item">
+
+
+                                <span class="legend-dot present-dot"></span>
+
+
+                                <span>
+                                    Present
+                                </span>
+
+
+                                <strong id="presentLegend">
+                                    0
+                                </strong>
+
+
+                            </div>
+
+
+                            <div class="legend-item">
+
+
+                                <span class="legend-dot absent-dot"></span>
+
+
+                                <span>
+                                    Absent
+                                </span>
+
+
+                                <strong id="absentLegend">
+                                    0
+                                </strong>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =====================================
+                 BOTTOM SECTION
+                 ===================================== -->
+
+            <section class="bottom-grid">
+
+
+                <!-- =================================
+                     QUICK ACTIONS
+                     ================================= -->
+
+                <div class="dashboard-panel quick-actions-panel">
+
+
+                    <div class="panel-header">
+
+
+                        <div>
+
+                            <span class="panel-icon">
+                                ϟ
+                            </span>
+
+                            <h2>
+                                Quick Actions
+                            </h2>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <a
+                            href="/register"
+                            class="quick-action blue-action"
+                        >
+
+                            <span class="quick-icon">
+                                ♟
+                            </span>
+
+                            <span>
+                                Register Trainee
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="/sessions"
+                            class="quick-action yellow-action"
+                        >
+
+                            <span class="quick-icon">
+                                ▣
+                            </span>
+
+                            <span>
+                                Create Session
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="/qr"
+                            class="quick-action green-action"
+                        >
+
+                            <span class="quick-icon">
+                                ▦
+                            </span>
+
+                            <span>
+                                Generate QR
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="/report"
+                            class="quick-action purple-action"
+                        >
+
+                            <span class="quick-icon">
+                                ▤
+                            </span>
+
+                            <span>
+                                View Reports
+                            </span>
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================
+                     KCCA PROMOTIONAL CARD
+                     ================================= -->
+
+                <div class="kcca-banner">
+
+
+                    <div class="banner-content">
+
+
+                        <h2>
+
+                            Together we build
+
+                            <br>
+
+                            stronger athletes and
+
+                            <br>
+
+                            a better Kampala.
+
+                        </h2>
+
+
+                        <div class="banner-line"></div>
+
+
+                        <p>
+                            KCCA Academy
+                        </p>
+
+
+                    </div>
+
+
+                    <div class="banner-logo">
+                        KCCA
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+         ========================================= -->
+
+    <script>
+
+
+        /*
+         * CURRENT DATE
+         */
+
+        const currentDate =
+            new Date();
+
+
+        const dateOptions = {
+
+            weekday: "short",
+
+            day: "2-digit",
+
+            month: "short",
+
+            year: "numeric"
+
+        };
+
+
+        document.getElementById(
+            "currentDate"
+        ).textContent =
+            currentDate.toLocaleDateString(
+                "en-GB",
+                dateOptions
+            );
+
+
+
+        /*
+         * TOTAL TRAINEES
+         */
+
+        fetch("/api/trainees")
+
+            .then(function(response) {
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Could not load trainees."
+                    );
+
+                }
+
+
+                return response.json();
+
+
+            })
+
+            .then(function(trainees) {
+
+
+                document.getElementById(
+                    "totalTrainees"
+                ).textContent =
+                    trainees.length;
+
+
+            })
+
+
+            .catch(function(error) {
+
+
+                console.error(error);
+
+
+                document.getElementById(
+                    "totalTrainees"
+                ).textContent =
+                    "0";
+
+
+            });
+
+
+
+        /*
+         * TRAINING SESSIONS
+         */
+
+        fetch("/api/sessions")
+
+            .then(function(response) {
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Could not load sessions."
+                    );
+
+                }
+
+
+                return response.json();
+
+
+            })
+
+
+            .then(function(sessions) {
+
+
+                document.getElementById(
+                    "totalSessions"
+                ).textContent =
+                    sessions.length;
+
+
+
+                /*
+                 * RECENT SESSIONS TABLE
+                 */
+
+                const sessionsTable =
+                    document.getElementById(
+                        "sessionsTable"
+                    );
+
+
+                sessionsTable.innerHTML = "";
+
+
+                if (sessions.length === 0) {
+
+
+                    sessionsTable.innerHTML = `
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="empty-message"
+                            >
+                                No training sessions found.
+                            </td>
+
+                        </tr>
+
+                    `;
+
+
+                    return;
+
+                }
+
+
+                const recentSessions =
+                    sessions.slice(0, 5);
+
+
+                recentSessions.forEach(
+                    function(session) {
+
+
+                        const row =
+                            document.createElement("tr");
+
+
+                        const sessionDate =
+                            session.session_date ||
+                            "-";
+
+
+                        const sessionTime =
+                            session.session_time ||
+                            "-";
+
+
+                        const sessionTitle =
+                            session.session_type ||
+                            "Training";
+
+
+                        const status =
+                            session.status ||
+                            "Scheduled";
+
+
+                        row.innerHTML = `
+
+                            <td>
+                                ${sessionDate}
+                            </td>
+
+
+                            <td>
+                                ${sessionTime}
+                            </td>
+
+
+                            <td>
+                                ${sessionTitle}
+                            </td>
+
+
+                            <td>
+
+                                <span class="status-badge">
+                                    ${status}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    href="/sessions"
+                                    class="view-button"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+                        `;
+
+
+                        sessionsTable.appendChild(row);
+
+
+                    }
+                );
+
+
+            })
+
+
+            .catch(function(error) {
+
+
+                console.error(error);
+
+
+                document.getElementById(
+                    "totalSessions"
+                ).textContent =
+                    "0";
+
+
+                document.getElementById(
+                    "sessionsTable"
+                ).innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="empty-message"
+                        >
+                            Unable to load sessions.
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+            });
+
+
+
+        /*
+         * TODAY'S ATTENDANCE
+         */
+
+        fetch("/api/attendance/today")
+
+            .then(function(response) {
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Attendance could not be loaded."
+                    );
+
+                }
+
+
+                return response.json();
+
+
+            })
+
+
+            .then(function(attendance) {
+
+
+                let present = 0;
+
+                let absent = 0;
+
+
+                attendance.forEach(
+                    function(record) {
+
+
+                        if (
+                            record.status === "Present"
+                        ) {
+
+                            present++;
+
+                        }
+
+
+                        if (
+                            record.status === "Absent"
+                        ) {
+
+                            absent++;
+
+                        }
+
+                    }
+                );
+
+
+                const total =
+                    present + absent;
+
+
+                let rate = 0;
+
+
+                if (total > 0) {
+
+                    rate =
+                        Math.round(
+                            (present / total) * 100
+                        );
+
+                }
+
+
+                /*
+                 * STAT CARD
+                 */
+
+                document.getElementById(
+                    "attendanceRate"
+                ).textContent =
+                    rate + "%";
+
+
+                /*
+                 * DONUT CENTER
+                 */
+
+                document.getElementById(
+                    "donutPercentage"
+                ).textContent =
+                    rate + "%";
+
+
+                /*
+                 * LEGEND
+                 */
+
+                document.getElementById(
+                    "presentLegend"
+                ).textContent =
+                    present;
+
+
+                document.getElementById(
+                    "absentLegend"
+                ).textContent =
+                    absent;
+
+
+                /*
+                 * DONUT
+                 */
+
+                document.getElementById(
+                    "attendanceDonut"
+                ).style.background =
+
+                    `conic-gradient(
+                        #0877ff ${rate}%,
+                        #ff4545 ${rate}% 100%
+                    )`;
+
+
+            })
+
+
+            .catch(function(error) {
+
+
+                console.error(error);
+
+
+                document.getElementById(
+                    "attendanceRate"
+                ).textContent =
+                    "0%";
+
+
+                document.getElementById(
+                    "donutPercentage"
+                ).textContent =
+                    "0%";
+
+
+            });
+
+
+
+        /*
+         * REPORT COUNT
+         */
+
+        fetch("/api/report")
+
+            .then(function(response) {
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Report unavailable."
+                    );
+
+                }
+
+
+                return response.json();
+
+
+            })
+
+
+            .then(function(report) {
+
+
+                if (Array.isArray(report)) {
+
+
+                    document.getElementById(
+                        "reportsGenerated"
+                    ).textContent =
+                        report.length;
+
+
+                } else {
+
+
+                    document.getElementById(
+                        "reportsGenerated"
+                    ).textContent =
+                        "0";
+
+                }
+
+
+            })
+
+
+            .catch(function() {
+
+
+                /*
+                 * If the report API is not available,
+                 * don't break the dashboard.
+                 */
+
+                document.getElementById(
+                    "reportsGenerated"
+                ).textContent =
+                    "0";
+
+
+            });
+
+
+    </script>
+
+
+</body>
+
+</html>

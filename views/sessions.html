@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KICKSYNC - Training Sessions</title>
+
+    <style>
+        :root {
+            --blue: #0057b8;
+            --blue-dark: #003f88;
+            --blue-deep: #002b5c;
+            --yellow: #f5c400;
+            --yellow-light: #fff8d6;
+            --white: #ffffff;
+            --bg: #f4f7fb;
+            --text: #172033;
+            --muted: #6b7280;
+            --border: #e3e8ef;
+            --green: #16803c;
+            --green-light: #e8f7ed;
+            --red: #c62828;
+            --red-light: #fdecec;
+            --orange: #b76500;
+            --orange-light: #fff3df;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: var(--blue-deep);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            height: 82px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--yellow);
+            color: var(--blue-deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 900;
+            margin-right: 11px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 10px;
+            color: #b9c7da;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 18px 12px;
+            overflow-y: auto;
+        }
+
+        .nav-section-title {
+            color: #8497b3;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 13px 7px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #d8e2f0;
+            padding: 11px 13px;
+            margin-bottom: 3px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s ease;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .sidebar-nav a.active {
+            background: var(--blue);
+            color: white;
+            font-weight: 700;
+        }
+
+        .nav-icon {
+            width: 27px;
+            font-size: 15px;
+            text-align: center;
+            margin-right: 7px;
+        }
+
+        .sidebar-bottom {
+            padding: 14px 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #ffb4b4;
+            padding: 11px 13px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .logout-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-content {
+            margin-left: 245px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            height: 82px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        .header-left h1 {
+            font-size: 21px;
+            color: var(--blue-deep);
+            margin-bottom: 4px;
+        }
+
+        .header-left p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .club-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .club-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--blue-deep);
+        }
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .page-content {
+            padding: 30px 32px 45px;
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title h2 {
+            font-size: 25px;
+            color: var(--blue-deep);
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .page-badge {
+            background: var(--yellow-light);
+            color: #7a6200;
+            border: 1px solid #f1d66a;
+            padding: 9px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           CREATE SESSION
+        ========================= */
+
+        .create-panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 40, 90, 0.04);
+        }
+
+        .panel-heading {
+            margin-bottom: 20px;
+        }
+
+        .panel-heading h3 {
+            color: var(--blue-deep);
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .panel-heading p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .session-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #39455a;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #ccd4df;
+            border-radius: 6px;
+            padding: 0 12px;
+            font-size: 13px;
+            color: var(--text);
+            background: white;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 2px rgba(0, 87, 184, 0.08);
+        }
+
+        .form-full {
+            grid-column: 1 / -1;
+        }
+
+        .create-button {
+            grid-column: 1 / -1;
+            height: 43px;
+            border: none;
+            border-radius: 6px;
+            background: var(--blue);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .create-button:hover {
+            background: var(--blue-dark);
+        }
+
+        .create-button:disabled {
+            background: #9aa8b8;
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           SESSIONS TABLE
+        ========================= */
+
+        .sessions-panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 40, 90, 0.04);
+            overflow: hidden;
+        }
+
+        .sessions-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sessions-header h3 {
+            font-size: 16px;
+            color: var(--blue-deep);
+        }
+
+        .session-count {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f7f9fc;
+        }
+
+        th {
+            padding: 13px 16px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #637085;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #edf0f4;
+            font-size: 13px;
+            color: #273247;
+        }
+
+        tbody tr:hover {
+            background: #fafcff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .session-id {
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .session-type {
+            font-weight: 700;
+            color: var(--blue-deep);
+        }
+
+        .coach-name {
+            font-weight: 600;
+        }
+
+        /* =========================
+           STATUS BADGES
+        ========================= */
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 14px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-scheduled {
+            background: #edf4ff;
+            color: var(--blue);
+        }
+
+        .status-completed {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .status-cancelled {
+            background: var(--red-light);
+            color: var(--red);
+        }
+
+        .status-other {
+            background: var(--orange-light);
+            color: var(--orange);
+        }
+
+        /* =========================
+           STATES
+        ========================= */
+
+        .loading-cell,
+        .empty-cell,
+        .error-cell {
+            text-align: center;
+            padding: 38px !important;
+            color: var(--muted);
+        }
+
+        .error-cell {
+            color: var(--red);
+        }
+
+        /* =========================
+           WATERMARK
+        ========================= */
+
+        .watermark {
+            text-align: center;
+            margin-top: 28px;
+            color: #c3cad4;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+            }
+
+            .session-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-full {
+                grid-column: auto;
+            }
+
+            .create-button {
+                grid-column: auto;
+            }
+
+            .page-content {
+                padding: 25px 20px 40px;
+            }
+
+            .top-header {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-nav {
+                max-height: none;
+            }
+
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .top-header {
+                height: auto;
+                padding: 18px 20px;
+            }
+
+            .header-right {
+                display: none;
+            }
+
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                KS
+            </div>
+
+            <div class="brand-text">
+                <div class="brand-name">
+                    KICKSYNC
+                </div>
+
+                <div class="brand-subtitle">
+                    Academy Management
+                </div>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-section-title">
+                Main
+            </div>
+
+            <a href="/dashboard">
+                <span class="nav-icon">▦</span>
+                Dashboard
+            </a>
+
+            <a href="/trainees">
+                <span class="nav-icon">♙</span>
+                Trainees
+            </a>
+
+            <a href="/register">
+                <span class="nav-icon">＋</span>
+                Register Trainee
+            </a>
+
+            <a href="/attendance">
+                <span class="nav-icon">✓</span>
+                Attendance
+            </a>
+
+            <a href="/sessions" class="active">
+                <span class="nav-icon">▣</span>
+                Training Sessions
+            </a>
+
+
+            <div class="nav-section-title">
+                Management
+            </div>
+
+            <a href="/qr">
+                <span class="nav-icon">▤</span>
+                QR Attendance
+            </a>
+
+            <a href="/report">
+                <span class="nav-icon">▤</span>
+                Reports
+            </a>
+
+            <a href="/groups">
+                <span class="nav-icon">♧</span>
+                Groups
+            </a>
+
+
+            <div class="nav-section-title">
+                Account
+            </div>
+
+            <a href="/profile">
+                <span class="nav-icon">●</span>
+                Profile
+            </a>
+
+            <a href="/settings">
+                <span class="nav-icon">⚙</span>
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="/logout" class="logout-link">
+                <span class="nav-icon">↪</span>
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="top-header">
+
+            <div class="header-left">
+
+                <h1>
+                    Training Sessions
+                </h1>
+
+                <p>
+                    Schedule and manage academy training sessions
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <div class="club-badge">
+                    KCCA
+                </div>
+
+                <div class="club-name">
+                    KCCA FC Academy
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+
+        <section class="page-content">
+
+
+            <!-- PAGE TITLE -->
+
+            <div class="page-title">
+
+                <div>
+
+                    <h2>
+                        Training Sessions
+                    </h2>
+
+                    <p>
+                        Create and monitor training sessions for the academy.
+                    </p>
+
+                </div>
+
+                <div class="page-badge">
+                    Session Management
+                </div>
+
+            </div>
+
+
+            <!-- CREATE SESSION -->
+
+            <div class="create-panel">
+
+                <div class="panel-heading">
+
+                    <h3>
+                        Create Training Session
+                    </h3>
+
+                    <p>
+                        Enter the details below to schedule a new academy session.
+                    </p>
+
+                </div>
+
+
+                <form
+                    id="sessionForm"
+                    class="session-form"
+                >
+
+                    <div class="form-group">
+
+                        <label for="session_date">
+                            Training Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="session_date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="session_time">
+                            Training Time
+                        </label>
+
+                        <input
+                            type="time"
+                            id="session_time"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="location">
+                            Training Location
+                        </label>
+
+                        <input
+                            type="text"
+                            id="location"
+                            placeholder="Example: KCCA Training Ground"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="session_type">
+                            Session Type
+                        </label>
+
+                        <select
+                            id="session_type"
+                            required
+                        >
+
+                            <option value="">
+                                Select session type
+                            </option>
+
+                            <option value="Regular Training">
+                                Regular Training
+                            </option>
+
+                            <option value="Fitness Training">
+                                Fitness Training
+                            </option>
+
+                            <option value="Tactical Training">
+                                Tactical Training
+                            </option>
+
+                            <option value="Match Preparation">
+                                Match Preparation
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="coach">
+                            Coach / Trainer
+                        </label>
+
+                        <input
+                            type="text"
+                            id="coach"
+                            placeholder="Enter coach name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="status">
+                            Session Status
+                        </label>
+
+                        <select
+                            id="status"
+                            required
+                        >
+
+                            <option value="Scheduled">
+                                Scheduled
+                            </option>
+
+                            <option value="Completed">
+                                Completed
+                            </option>
+
+                            <option value="Cancelled">
+                                Cancelled
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="create-button"
+                        id="createButton"
+                    >
+                        Create Training Session
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- SESSIONS LIST -->
+
+            <div class="sessions-panel">
+
+                <div class="sessions-header">
+
+                    <h3>
+                        Existing Training Sessions
+                    </h3>
+
+                    <span
+                        class="session-count"
+                        id="sessionCount"
+                    >
+                        Loading sessions...
+                    </span>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ID
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Time
+                                </th>
+
+                                <th>
+                                    Location
+                                </th>
+
+                                <th>
+                                    Type
+                                </th>
+
+                                <th>
+                                    Coach
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="sessionsTable">
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="loading-cell"
+                                >
+                                    Loading sessions...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <div class="watermark">
+                KICKSYNC • KCCA FC Academy Management System
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        // ==========================================
+        // LOAD SESSIONS
+        // ==========================================
+
+        function loadSessions() {
+
+            fetch("/api/sessions")
+
+                .then(function(response) {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Could not load sessions."
+                        );
+
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(function(sessions) {
+
+                    const table =
+                        document.getElementById(
+                            "sessionsTable"
+                        );
+
+
+                    const sessionCount =
+                        document.getElementById(
+                            "sessionCount"
+                        );
+
+
+                    table.innerHTML = "";
+
+
+                    sessionCount.textContent =
+                        sessions.length +
+                        (
+                            sessions.length === 1
+                                ? " session"
+                                : " sessions"
+                        );
+
+
+                    if (sessions.length === 0) {
+
+                        table.innerHTML = `
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="empty-cell"
+                                >
+                                    No training sessions yet.
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                        return;
+
+                    }
+
+
+                    sessions.forEach(function(session) {
+
+                        const row =
+                            document.createElement("tr");
+
+
+                        let statusClass =
+                            "status-other";
+
+
+                        if (
+                            session.status ===
+                            "Scheduled"
+                        ) {
+
+                            statusClass =
+                                "status-scheduled";
+
+                        }
+                        else if (
+                            session.status ===
+                            "Completed"
+                        ) {
+
+                            statusClass =
+                                "status-completed";
+
+                        }
+                        else if (
+                            session.status ===
+                            "Cancelled"
+                        ) {
+
+                            statusClass =
+                                "status-cancelled";
+
+                        }
+
+
+                        row.innerHTML = `
+
+                            <td>
+                                <span class="session-id">
+                                    #${session.id}
+                                </span>
+                            </td>
+
+                            <td>
+                                ${session.session_date}
+                            </td>
+
+                            <td>
+                                ${session.session_time}
+                            </td>
+
+                            <td>
+                                ${session.location}
+                            </td>
+
+                            <td>
+                                <span class="session-type">
+                                    ${session.session_type}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="coach-name">
+                                    ${session.coach}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge ${statusClass}">
+                                    ${session.status}
+                                </span>
+                            </td>
+
+                        `;
+
+
+                        table.appendChild(row);
+
+                    });
+
+                })
+
+                .catch(function(error) {
+
+                    console.error(error);
+
+
+                    document.getElementById(
+                        "sessionsTable"
+                    ).innerHTML = `
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="error-cell"
+                            >
+                                Error loading sessions.
+                            </td>
+
+                        </tr>
+
+                    `;
+
+
+                    document.getElementById(
+                        "sessionCount"
+                    ).textContent =
+                        "Unable to load sessions";
+
+                });
+
+        }
+
+
+        // ==========================================
+        // CREATE TRAINING SESSION
+        // ==========================================
+
+        document.getElementById(
+            "sessionForm"
+        ).addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                const sessionData = {
+
+                    session_date:
+                        document.getElementById(
+                            "session_date"
+                        ).value,
+
+                    session_time:
+                        document.getElementById(
+                            "session_time"
+                        ).value,
+
+                    location:
+                        document.getElementById(
+                            "location"
+                        ).value,
+
+                    session_type:
+                        document.getElementById(
+                            "session_type"
+                        ).value,
+
+                    coach:
+                        document.getElementById(
+                            "coach"
+                        ).value,
+
+                    status:
+                        document.getElementById(
+                            "status"
+                        ).value
+
+                };
+
+
+                const createButton =
+                    document.getElementById(
+                        "createButton"
+                    );
+
+
+                createButton.disabled = true;
+
+                createButton.textContent =
+                    "Creating Session...";
+
+
+                fetch("/api/sessions", {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            sessionData
+                        )
+
+                })
+
+                .then(function(response) {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Failed to create session."
+                        );
+
+                    }
+
+                    return response.text();
+
+                })
+
+                .then(function() {
+
+                    alert(
+                        "Training session created successfully!"
+                    );
+
+
+                    document.getElementById(
+                        "sessionForm"
+                    ).reset();
+
+
+                    createButton.disabled = false;
+
+                    createButton.textContent =
+                        "Create Training Session";
+
+
+                    loadSessions();
+
+                })
+
+                .catch(function(error) {
+
+                    console.error(error);
+
+
+                    alert(
+                        "Failed to create training session."
+                    );
+
+
+                    createButton.disabled = false;
+
+                    createButton.textContent =
+                        "Create Training Session";
+
+                });
+
+            }
+        );
+
+
+        // ==========================================
+        // LOAD SESSIONS WHEN PAGE OPENS
+        // ==========================================
+
+        loadSessions();
+
+    </script>
+
+</body>
+
+</html>

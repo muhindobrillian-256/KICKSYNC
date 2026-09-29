@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>KICKSYNC - Login</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #062b5c 0%,
+                    #0b5cab 55%,
+                    #f4c400 100%
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+        }
+
+
+        .login-container {
+
+            width: 100%;
+
+            max-width: 430px;
+
+        }
+
+
+        /* =========================
+           BRAND
+        ========================= */
+
+        .brand {
+
+            text-align: center;
+
+            color: white;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .brand-logo {
+
+            width: 70px;
+
+            height: 70px;
+
+            margin: 0 auto 12px;
+
+            background: #f4c400;
+
+            color: #062b5c;
+
+            border-radius: 16px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 27px;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.18);
+
+        }
+
+
+        .brand h1 {
+
+            font-size: 30px;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .brand p {
+
+            font-size: 13px;
+
+            color: #e5eef8;
+
+        }
+
+
+
+        /* =========================
+           LOGIN CARD
+        ========================= */
+
+        .login-card {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.20);
+
+        }
+
+
+        .login-card h2 {
+
+            color: #062b5c;
+
+            font-size: 23px;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .login-description {
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+
+            margin-bottom: 19px;
+
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            color: #374151;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .form-group input {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            outline: none;
+
+        }
+
+
+        .form-group input:focus {
+
+            border-color: #0b5cab;
+
+            box-shadow:
+                0 0 0 3px rgba(11,92,171,0.10);
+
+        }
+
+
+        .login-button {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #0b5cab;
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 5px;
+
+        }
+
+
+        .login-button:hover {
+
+            background: #08477f;
+
+        }
+
+
+
+        /* =========================
+           COACH REGISTRATION
+        ========================= */
+
+        .register-section {
+
+            margin-top: 25px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #e5e7eb;
+
+            text-align: center;
+
+        }
+
+
+        .register-section p {
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .register-link {
+
+            display: inline-block;
+
+            text-decoration: none;
+
+            color: #0b5cab;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            padding: 9px 16px;
+
+            border: 1px solid #0b5cab;
+
+            border-radius: 7px;
+
+        }
+
+
+        .register-link:hover {
+
+            background: #0b5cab;
+
+            color: white;
+
+        }
+
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .login-footer {
+
+            text-align: center;
+
+            color: #e5eef8;
+
+            font-size: 11px;
+
+            margin-top: 18px;
+
+        }
+
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            .login-card {
+
+                padding: 25px;
+
+            }
+
+
+            .brand h1 {
+
+                font-size: 26px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="login-container">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+
+            <div class="brand-logo">
+
+                KS
+
+            </div>
+
+
+            <h1>
+                KICKSYNC
+            </h1>
+
+
+            <p>
+                KCCA FC Academy Management System
+            </p>
+
+
+        </div>
+
+
+
+        <!-- LOGIN CARD -->
+
+        <div class="login-card">
+
+
+            <h2>
+                Welcome Back
+            </h2>
+
+
+            <p class="login-description">
+
+                Sign in to manage trainees,
+                attendance and training sessions.
+
+            </p>
+
+
+
+            <form
+                action="/login"
+                method="POST"
+            >
+
+
+                <!-- USERNAME -->
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- LOGIN -->
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+
+                    Login
+
+                </button>
+
+
+            </form>
+
+
+
+            <!-- COACH REGISTRATION -->
+
+            <div class="register-section">
+
+
+                <p>
+                    Are you a new coach?
+                </p>
+
+
+                <a
+                    href="/coach-register"
+                    class="register-link"
+                >
+                    Create Coach Account
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="login-footer">
+
+            KICKSYNC &copy; 2026 |
+            KCCA FC Academy
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

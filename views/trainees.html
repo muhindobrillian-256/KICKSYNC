@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KICKSYNC - Trainees</title>
+
+    <link rel="stylesheet" href="/CSS/style.css">
+
+    <style>
+        /* ==========================================
+           TRAINEES PAGE
+        ========================================== */
+
+        .trainees-page {
+            padding: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 20px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            color: #123b78;
+            font-size: 28px;
+        }
+
+        .page-title p {
+            margin: 6px 0 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .register-btn {
+            background: #f4c400;
+            color: #123b78;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .register-btn:hover {
+            background: #dcae00;
+        }
+
+        /* Statistics */
+
+        .trainee-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card.blue {
+            border-left: 5px solid #1769e0;
+        }
+
+        .stat-card.yellow {
+            border-left: 5px solid #f4c400;
+        }
+
+        .stat-card.dark {
+            border-left: 5px solid #123b78;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            color: #123b78;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        /* Main panel */
+
+        .trainees-panel {
+            background: #ffffff;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 22px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            color: #123b78;
+            font-size: 18px;
+        }
+
+        .search-box {
+            width: 230px;
+            padding: 10px 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .search-box:focus {
+            border-color: #1769e0;
+            box-shadow: 0 0 0 2px rgba(23, 105, 224, 0.1);
+        }
+
+        /* Table */
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .trainees-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .trainees-table th {
+            background: #123b78;
+            color: #ffffff;
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .trainees-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #edf0f4;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .trainees-table tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        .trainee-id {
+            font-weight: 700;
+            color: #1769e0;
+        }
+
+        .trainee-name {
+            font-weight: 700;
+            color: #123b78;
+        }
+
+        .position-badge {
+            display: inline-block;
+            background: #eef5ff;
+            color: #1769e0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Action buttons */
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            border: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .edit-btn {
+            background: #1769e0;
+            color: #ffffff;
+        }
+
+        .edit-btn:hover {
+            background: #1255b5;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .delete-btn:hover {
+            background: #fecaca;
+        }
+
+        /* Empty/loading message */
+
+        .table-message {
+            text-align: center;
+            padding: 35px !important;
+            color: #6b7280 !important;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 800px) {
+            .trainees-page {
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .trainee-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .search-box {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- MAIN PAGE -->
+
+    <main class="trainees-page">
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div class="page-title">
+                <h1>Academy Trainees</h1>
+
+                <p>
+                    Manage and view registered KICKSYNC academy trainees.
+                </p>
+            </div>
+
+            <a href="/register" class="register-btn">
+                + Register Trainee
+            </a>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="trainee-stats">
+
+            <div class="stat-card blue">
+
+                <div class="stat-label">
+                    Total Trainees
+                </div>
+
+                <div class="stat-number" id="totalTrainees">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card yellow">
+
+                <div class="stat-label">
+                    Academy Status
+                </div>
+
+                <div class="stat-number">
+                    Active
+                </div>
+
+            </div>
+
+
+            <div class="stat-card dark">
+
+                <div class="stat-label">
+                    System
+                </div>
+
+                <div class="stat-number">
+                    KICKSYNC
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TRAINEES PANEL -->
+
+        <section class="trainees-panel">
+
+            <div class="panel-header">
+
+                <h2>Registered Trainees</h2>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-box"
+                    placeholder="Search trainee..."
+                >
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            <div class="table-container">
+
+                <table class="trainees-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Age</th>
+                            <th>Position</th>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="traineeTable">
+
+                        <tr>
+                            <td
+                                colspan="5"
+                                class="table-message"
+                            >
+                                Loading trainees...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        let allTrainees = [];
+
+
+        // ==========================================
+        // READ THE GROUP FILTER FROM THE URL
+        // (e.g. /trainees?group=u15)
+        // ==========================================
+
+        const urlParams =
+            new URLSearchParams(window.location.search);
+
+        const groupFilter =
+            (urlParams.get("group") || "")
+                .trim()
+                .toLowerCase();
+
+
+        // ==========================================
+        // LOAD TRAINEES
+        // ==========================================
+
+        function loadTrainees() {
+
+            // Build the API URL — include ?group=u15
+            // if the page was opened from a group card.
+
+            let apiUrl = "/api/trainees";
+
+            if (
+                groupFilter === "u15" ||
+                groupFilter === "u17" ||
+                groupFilter === "u20"
+            ) {
+
+                apiUrl +=
+                    "?group=" +
+                    encodeURIComponent(groupFilter);
+
+            }
+
+
+            fetch(apiUrl)
+
+                .then(function(response) {
+
+                    if (!response.ok) {
+                        throw new Error(
+                            "Could not load trainees."
+                        );
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(function(trainees) {
+
+                    allTrainees = trainees;
+
+                    document.getElementById(
+                        "totalTrainees"
+                    ).textContent = trainees.length;
+
+                    displayTrainees(trainees);
+
+                })
+
+                .catch(function(error) {
+
+                    console.error(error);
+
+                    const table =
+                        document.getElementById(
+                            "traineeTable"
+                        );
+
+                    table.innerHTML = `
+                        <tr>
+                            <td
+                                colspan="5"
+                                class="table-message"
+                            >
+                                Error loading trainees.
+                            </td>
+                        </tr>
+                    `;
+
+                });
+
+        }
+
+
+        // ==========================================
+        // DISPLAY TRAINEES
+        // ==========================================
+
+        function displayTrainees(trainees) {
+
+            const table =
+                document.getElementById(
+                    "traineeTable"
+                );
+
+            table.innerHTML = "";
+
+
+            // No trainees
+
+            if (trainees.length === 0) {
+
+                table.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="5"
+                            class="table-message"
+                        >
+                            No trainees registered yet.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            // Display trainees
+
+            trainees.forEach(function(player) {
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+
+                    <td>
+                        <span class="trainee-id">
+                            #${player.id}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="trainee-name">
+                            ${player.full_name}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${player.age}
+                    </td>
+
+                    <td>
+                        <span class="position-badge">
+                            ${player.position}
+                        </span>
+                    </td>
+
+                    <td>
+
+                        <div class="action-buttons">
+
+                            <button
+                                type="button"
+                                class="edit-btn"
+                                onclick="editPlayer(${player.id})"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                type="button"
+                                class="delete-btn"
+                                onclick="deletePlayer(${player.id})"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                `;
+
+
+                table.appendChild(row);
+
+            });
+
+        }
+
+
+        // ==========================================
+        // SEARCH TRAINEES
+        // ==========================================
+
+        document
+            .getElementById("searchInput")
+            .addEventListener(
+                "input",
+                function() {
+
+                    const searchText =
+                        this.value
+                            .toLowerCase()
+                            .trim();
+
+
+                    const filtered =
+                        allTrainees.filter(
+                            function(player) {
+
+                                return (
+                                    String(
+                                        player.id
+                                    )
+                                    .toLowerCase()
+                                    .includes(
+                                        searchText
+                                    )
+
+                                    ||
+
+                                    String(
+                                        player.full_name
+                                    )
+                                    .toLowerCase()
+                                    .includes(
+                                        searchText
+                                    )
+
+                                    ||
+
+                                    String(
+                                        player.position
+                                    )
+                                    .toLowerCase()
+                                    .includes(
+                                        searchText
+                                    )
+                                );
+
+                            }
+                        );
+
+
+                    displayTrainees(filtered);
+
+                }
+            );
+
+
+        // ==========================================
+        // EDIT TRAINEE
+        // ==========================================
+
+        function editPlayer(id) {
+
+            window.location.href =
+                "/edit/" + id;
+
+        }
+
+
+        // ==========================================
+        // DELETE TRAINEE
+        // ==========================================
+
+        function deletePlayer(id) {
+
+            const confirmation =
+                confirm(
+                    "Are you sure you want to delete this trainee?"
+                );
+
+
+            if (!confirmation) {
+                return;
+            }
+
+
+            fetch(
+                "/api/trainees/" +
+                id +
+                "/delete",
+                {
+                    method: "POST"
+                }
+            )
+
+            .then(function(response) {
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Delete failed."
+                    );
+                }
+
+                loadTrainees();
+
+            })
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                alert(
+                    "Failed to delete trainee."
+                );
+
+            });
+
+        }
+
+
+        // ==========================================
+        // LOAD PAGE
+        // ==========================================
+
+        loadTrainees();
+
+    </script>
+
+</body>
+</html>

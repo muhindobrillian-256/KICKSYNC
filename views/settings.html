@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KICKSYNC - Settings</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #062b5c;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            height: 90px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            background: #f4c400;
+            color: #062b5c;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .brand-text h2 {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: #d5e2f2;
+        }
+
+        .sidebar-nav {
+            padding: 20px 12px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .nav-title {
+            font-size: 10px;
+            color: #91a8c4;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px 12px;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            text-decoration: none;
+            color: #dbe7f5;
+            padding: 12px 14px;
+            margin-bottom: 4px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255,255,255,0.09);
+            color: white;
+        }
+
+        .sidebar-nav a.active {
+            background: #f4c400;
+            color: #062b5c;
+            font-weight: bold;
+        }
+
+        .sidebar-bottom {
+            padding: 15px 12px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .logout-link {
+            display: block;
+            text-decoration: none;
+            color: #ffdddd;
+            padding: 12px 14px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .logout-link:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-content {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .top-header h1 {
+            font-size: 22px;
+            color: #062b5c;
+        }
+
+        .top-header p {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .header-badge {
+            background: #fff7cc;
+            color: #765f00;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .page-content {
+            padding: 30px;
+            max-width: 900px;
+        }
+
+        .page-intro {
+            margin-bottom: 25px;
+        }
+
+        .page-intro h2 {
+            font-size: 24px;
+            color: #062b5c;
+            margin-bottom: 7px;
+        }
+
+        .page-intro p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* =========================
+           SETTINGS
+        ========================= */
+
+        .settings-panel {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .settings-section {
+            padding: 25px;
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+
+        .settings-section h3 {
+            color: #062b5c;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .section-description {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 17px 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .setting-info strong {
+            display: block;
+            color: #1f2937;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .setting-info span {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* =========================
+           TOGGLE
+        ========================= */
+
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #cbd5e1;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            top: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle input:checked + .slider {
+            background: #0b5cab;
+        }
+
+        .toggle input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* =========================
+           STATUS MESSAGE
+        ========================= */
+
+        .settings-message {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 15px;
+            border-radius: 7px;
+            background: #e8f7ee;
+            color: #177245;
+            font-size: 13px;
+        }
+
+        .settings-message.show {
+            display: block;
+        }
+
+        .settings-note {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 7px;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+
+            .top-header {
+                padding: 0 18px;
+            }
+
+            .page-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-nav {
+                max-height: 300px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .top-header {
+                height: auto;
+                padding: 18px;
+            }
+
+            .header-badge {
+                display: none;
+            }
+
+            .setting-row {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                KS
+            </div>
+
+            <div class="brand-text">
+                <h2>KICKSYNC</h2>
+                <span>Academy Management</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-title">
+                Main
+            </div>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/trainees">
+                Trainees
+            </a>
+
+            <a href="/register">
+                Register Trainee
+            </a>
+
+            <a href="/attendance">
+                Attendance
+            </a>
+
+            <a href="/sessions">
+                Training Sessions
+            </a>
+
+
+            <div class="nav-title">
+                Management
+            </div>
+
+            <a href="/qr">
+                QR Attendance
+            </a>
+
+            <a href="/report">
+                Reports
+            </a>
+
+            <a href="/groups">
+                Groups
+            </a>
+
+
+            <div class="nav-title">
+                Account
+            </div>
+
+            <a href="/profile">
+                Profile
+            </a>
+
+            <a href="/settings" class="active">
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="/logout" class="logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <header class="top-header">
+
+            <div>
+                <h1>Account Settings</h1>
+                <p>KICKSYNC Academy Training Management</p>
+            </div>
+
+            <div class="header-badge">
+                KCCA FC ACADEMY
+            </div>
+
+        </header>
+
+
+
+        <section class="page-content">
+
+            <div class="page-intro">
+
+                <h2>Settings</h2>
+
+                <p>
+                    Manage your KICKSYNC application preferences.
+                </p>
+
+            </div>
+
+
+
+            <div class="settings-panel">
+
+
+                <!-- NOTIFICATIONS -->
+
+                <div class="settings-section">
+
+                    <h3>
+                        Notifications
+                    </h3>
+
+                    <p class="section-description">
+                        Choose whether you want to receive system
+                        notifications.
+                    </p>
+
+
+                    <div class="setting-row">
+
+                        <div class="setting-info">
+
+                            <strong>
+                                Receive Email Notifications
+                            </strong>
+
+                            <span>
+                                Receive notifications about training
+                                sessions and attendance.
+                            </span>
+
+                        </div>
+
+
+                        <label class="toggle">
+
+                            <input
+                                type="checkbox"
+                                id="emailNotifications"
+                                checked
+                            >
+
+                            <span class="slider"></span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- APPEARANCE -->
+
+                <div class="settings-section">
+
+                    <h3>
+                        Appearance
+                    </h3>
+
+                    <p class="section-description">
+                        Control how the KICKSYNC interface appears.
+                    </p>
+
+
+                    <div class="setting-row">
+
+                        <div class="setting-info">
+
+                            <strong>
+                                Dark Mode
+                            </strong>
+
+                            <span>
+                                Enable dark mode for the KICKSYNC
+                                interface.
+                            </span>
+
+                        </div>
+
+
+                        <label class="toggle">
+
+                            <input
+                                type="checkbox"
+                                id="darkMode"
+                            >
+
+                            <span class="slider"></span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+            <div
+                id="settingsMessage"
+                class="settings-message"
+            >
+                Settings updated.
+            </div>
+
+
+            <div class="settings-note">
+
+                <strong>Note:</strong>
+                Your notification and appearance preferences are
+                currently saved in this browser. More account and
+                security settings will be added when we complete
+                the final KICKSYNC login and security system.
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <script>
+
+        const emailNotifications =
+            document.getElementById(
+                "emailNotifications"
+            );
+
+        const darkMode =
+            document.getElementById(
+                "darkMode"
+            );
+
+        const settingsMessage =
+            document.getElementById(
+                "settingsMessage"
+            );
+
+
+        // =========================
+        // LOAD SAVED SETTINGS
+        // =========================
+
+        const savedNotifications =
+            localStorage.getItem(
+                "kicksyncEmailNotifications"
+            );
+
+        const savedDarkMode =
+            localStorage.getItem(
+                "kicksyncDarkMode"
+            );
+
+
+        if (savedNotifications !== null) {
+
+            emailNotifications.checked =
+                savedNotifications === "true";
+
+        }
+
+
+        if (savedDarkMode !== null) {
+
+            darkMode.checked =
+                savedDarkMode === "true";
+
+        }
+
+
+
+        // =========================
+        // SAVE NOTIFICATION SETTING
+        // =========================
+
+        emailNotifications.addEventListener(
+            "change",
+            function () {
+
+                localStorage.setItem(
+                    "kicksyncEmailNotifications",
+                    emailNotifications.checked
+                );
+
+                showSettingsMessage();
+
+            }
+        );
+
+
+
+        // =========================
+        // DARK MODE SETTING
+        // =========================
+
+        darkMode.addEventListener(
+            "change",
+            function () {
+
+                localStorage.setItem(
+                    "kicksyncDarkMode",
+                    darkMode.checked
+                );
+
+                showSettingsMessage();
+
+            }
+        );
+
+
+
+        // =========================
+        // MESSAGE
+        // =========================
+
+        function showSettingsMessage() {
+
+            settingsMessage.classList.add(
+                "show"
+            );
+
+            setTimeout(
+                function () {
+
+                    settingsMessage.classList.remove(
+                        "show"
+                    );
+
+                },
+                2000
+            );
+
+        }
+
+    </script>
+
+</body>
+</html>

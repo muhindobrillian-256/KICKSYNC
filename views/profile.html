@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KICKSYNC - Profile</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #062b5c;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            height: 90px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            background: #f4c400;
+            color: #062b5c;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .brand-text h2 {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: #d5e2f2;
+        }
+
+        .sidebar-nav {
+            padding: 20px 12px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .nav-title {
+            font-size: 10px;
+            color: #91a8c4;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px 12px;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            text-decoration: none;
+            color: #dbe7f5;
+            padding: 12px 14px;
+            margin-bottom: 4px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255,255,255,0.09);
+            color: white;
+        }
+
+        .sidebar-nav a.active {
+            background: #f4c400;
+            color: #062b5c;
+            font-weight: bold;
+        }
+
+        .sidebar-bottom {
+            padding: 15px 12px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .logout-link {
+            display: block;
+            text-decoration: none;
+            color: #ffdddd;
+            padding: 12px 14px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .logout-link:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-content {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .top-header h1 {
+            font-size: 22px;
+            color: #062b5c;
+        }
+
+        .top-header p {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .header-badge {
+            background: #fff7cc;
+            color: #765f00;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .page-content {
+            padding: 30px;
+        }
+
+        .page-intro {
+            margin-bottom: 25px;
+        }
+
+        .page-intro h2 {
+            font-size: 24px;
+            color: #062b5c;
+            margin-bottom: 7px;
+        }
+
+        .page-intro p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* =========================
+           PROFILE
+        ========================= */
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 25px;
+            max-width: 900px;
+        }
+
+        .profile-card,
+        .details-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .profile-card {
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #0b5cab;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .profile-card h3 {
+            color: #062b5c;
+            font-size: 19px;
+            margin-bottom: 6px;
+        }
+
+        .profile-role {
+            display: inline-block;
+            background: #fff7cc;
+            color: #765f00;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .profile-card p {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        .details-card h3 {
+            color: #062b5c;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .detail-value {
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .account-note {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 7px;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 800px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+
+            .top-header {
+                padding: 0 18px;
+            }
+
+            .page-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-nav {
+                max-height: 300px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .top-header {
+                height: auto;
+                padding: 18px;
+            }
+
+            .header-badge {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                KS
+            </div>
+
+            <div class="brand-text">
+                <h2>KICKSYNC</h2>
+                <span>Academy Management</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-title">
+                Main
+            </div>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/trainees">
+                Trainees
+            </a>
+
+            <a href="/register">
+                Register Trainee
+            </a>
+
+            <a href="/attendance">
+                Attendance
+            </a>
+
+            <a href="/sessions">
+                Training Sessions
+            </a>
+
+
+            <div class="nav-title">
+                Management
+            </div>
+
+            <a href="/qr">
+                QR Attendance
+            </a>
+
+            <a href="/report">
+                Reports
+            </a>
+
+            <a href="/groups">
+                Groups
+            </a>
+
+
+            <div class="nav-title">
+                Account
+            </div>
+
+            <a href="/profile" class="active">
+                Profile
+            </a>
+
+            <a href="/settings">
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="/logout" class="logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <header class="top-header">
+
+            <div>
+                <h1>User Profile</h1>
+                <p>KICKSYNC Academy Training Management</p>
+            </div>
+
+            <div class="header-badge">
+                KCCA FC ACADEMY
+            </div>
+
+        </header>
+
+
+
+        <section class="page-content">
+
+            <div class="page-intro">
+
+                <h2>My Profile</h2>
+
+                <p>
+                    View your KICKSYNC account information.
+                </p>
+
+            </div>
+
+
+
+            <div class="profile-layout">
+
+
+                <!-- PROFILE SUMMARY -->
+
+                <div class="profile-card">
+
+                    <div
+                        class="profile-avatar"
+                        id="profileAvatar"
+                    >
+                        U
+                    </div>
+
+                    <h3 id="profName">
+                        Loading...
+                    </h3>
+
+                    <span
+                        class="profile-role"
+                        id="profRole"
+                    >
+                        Loading...
+                    </span>
+
+                    <p>
+                        KICKSYNC Academy Management System
+                    </p>
+
+                </div>
+
+
+
+                <!-- ACCOUNT DETAILS -->
+
+                <div class="details-card">
+
+                    <h3>
+                        Account Information
+                    </h3>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Full Name
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="detailName"
+                        >
+                            Loading...
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Username
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="detailUsername"
+                        >
+                            Loading...
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Role
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="detailRole"
+                        >
+                            Loading...
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Account Status
+                        </span>
+
+                        <span class="detail-value">
+                            Active
+                        </span>
+
+                    </div>
+
+
+                    <div class="account-note">
+
+                        Your account information is managed by the
+                        KICKSYNC system administrator. Account creation,
+                        password management and role permissions will be
+                        finalized when we complete the login and security
+                        section.
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <script>
+
+        /*
+         * The current login system stores the logged-in user's
+         * information in the server session.
+         *
+         * The final app.js update will provide the account
+         * information securely to this page.
+         *
+         * For now, we display the information already available
+         * to the page through the session when possible.
+         */
+
+
+        fetch("/api/profile")
+
+            .then(response => {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Profile information unavailable."
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(user => {
+
+                const name =
+                    user.full_name ||
+                    user.name ||
+                    "User";
+
+                const username =
+                    user.username ||
+                    "Not available";
+
+                const role =
+                    user.role ||
+                    "User";
+
+
+                document.getElementById(
+                    "profName"
+                ).textContent = name;
+
+
+                document.getElementById(
+                    "profRole"
+                ).textContent = role;
+
+
+                document.getElementById(
+                    "detailName"
+                ).textContent = name;
+
+
+                document.getElementById(
+                    "detailUsername"
+                ).textContent = username;
+
+
+                document.getElementById(
+                    "detailRole"
+                ).textContent = role;
+
+
+                document.getElementById(
+                    "profileAvatar"
+                ).textContent =
+                    name.charAt(0).toUpperCase();
+
+            })
+
+            .catch(error => {
+
+                console.error(
+                    "Profile error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "profName"
+                ).textContent =
+                    "Account User";
+
+
+                document.getElementById(
+                    "profRole"
+                ).textContent =
+                    "User";
+
+
+                document.getElementById(
+                    "detailName"
+                ).textContent =
+                    "Account User";
+
+
+                document.getElementById(
+                    "detailUsername"
+                ).textContent =
+                    "Available after login";
+
+
+                document.getElementById(
+                    "detailRole"
+                ).textContent =
+                    "User";
+
+
+                document.getElementById(
+                    "profileAvatar"
+                ).textContent =
+                    "U";
+
+            });
+
+    </script>
+
+</body>
+</html>
