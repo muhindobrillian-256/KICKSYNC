@@ -2,6 +2,9 @@ require("dotenv").config();
 
 const MySQL = require("mysql2");
 
+console.log("MYSQLHOST:", process.env.MYSQLHOST);
+console.log("MYSQLPORT:", process.env.MYSQLPORT);
+console.log("MYSQLDATABASE:", process.env.MYSQLDATABASE);
 const DB = MySQL.createPool({
     host: process.env.MYSQLHOST || process.env.MYSQL_HOST || "localhost",
 
