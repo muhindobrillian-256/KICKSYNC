@@ -2,9 +2,23 @@ require("dotenv").config();
 
 const MySQL = require("mysql2");
 
-console.log("MYSQL_URL exists:", !!process.env.MYSQL_URL);
+console.log("MYSQLHOST:", process.env.MYSQLHOST ? "FOUND" : "MISSING");
+console.log("MYSQLPORT:", process.env.MYSQLPORT ? "FOUND" : "MISSING");
+console.log("MYSQLDATABASE:", process.env.MYSQLDATABASE ? "FOUND" : "MISSING");
 
-const DB = MySQL.createPool(process.env.MYSQL_URL || "mysql://root:@localhost:3306/kicksync");
+const DB = MySQL.createPool({
+    host: process.env.MYSQLHOST || "localhost",
+    port: process.env.MYSQLPORT || 3306,
+    user: process.env.MYSQLUSER || "root",
+    password: process.env.MYSQLPASSWORD || "",
+    database: process.env.MYSQLDATABASE || "kicksync",
+
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
+});
 
 DB.getConnection((err, connection) => {
     if (err) {
