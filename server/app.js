@@ -36,7 +36,16 @@ const sessionStoreOptions = {
     port: process.env.MYSQLPORT,
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD,
-    database: process.env.MYSQLDATABASE
+    database: process.env.MYSQLDATABASE,
+
+    schema: {
+        tableName: "login_sessions",
+        columnNames: {
+            session_id: "session_id",
+            expires: "expires",
+            data: "data"
+        }
+    }
 };
 
 const sessionStore = new MySQLStore(sessionStoreOptions);
@@ -1799,6 +1808,7 @@ app.post(
                             session_id
                         ]
                     );
+
                 if (existing.length > 0) {
 
                     skipped.push(
