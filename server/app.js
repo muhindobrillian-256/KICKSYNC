@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
 const crypto = require("crypto");
 const db = require("./database");
 const QRCode = require("qrcode");
@@ -30,9 +31,21 @@ app.disable("x-powered-by");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const sessionStoreOptions = {
+    host: process.env.MYSQLHOST,
+    port: process.env.MYSQLPORT,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE
+};
+
+const sessionStore = new MySQLStore(sessionStoreOptions);
+
 app.use(
     session({
+        key: "kicksync_session",
         secret: SESSION_SECRET,
+        store: sessionStore,
         resave: false,
         saveUninitialized: false,
 
@@ -986,7 +999,7 @@ app.get("/logout", (req, res) => {
 
         }
 
-        res.clearCookie("connect.sid");
+        res.clearCookie("kicksync_session");
 
         res.redirect("/");
 
